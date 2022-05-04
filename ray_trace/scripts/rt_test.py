@@ -9,12 +9,17 @@ import sys
 from stl import mesh
 import json
 import rospkg
-from tr_publisher import publish_triangles
+from tr_publisher import publish_triangles, test
 from velma_common import *
 from velma_kinematics.velma_ik_geom import KinematicsSolverVelma
 from rcprg_ros_utils import exitError
 from Initializer import Initializer
 import math
+from ray_trace_maths import ray_trace
+import sys
+
+RESOLUTION = [80, 60]
+FOCAL_LENGTH = 693
 
 
 def get_stl_dict(rt_path):
@@ -26,8 +31,10 @@ def get_stl_dict(rt_path):
 
 
 def convert_paths_to_meshes(stl_paths):
+    bounding_boxes = []
     for stl_name, stl_path in stl_paths.items():
-        stl_paths[stl_name] = mesh.Mesh.from_file(stl_path)
+        stl_mesh = mesh.Mesh.from_file(stl_path)
+        stl_paths[stl_name] = stl_mesh
     return stl_paths
 
 def transform_triangle(xt, yt, zt, tf):
@@ -47,11 +54,11 @@ def get_transform_origin(origin):
 
 
 def transform_meshes(velma, meshes, stl_origins):
+    j=0
     for mesh_name, mesh in meshes.items():
             tf = velma.getTf('world', mesh_name)
             t = tf.p
             r, p, y = tf.M.GetRPY()
-            #mesh.rotate(np.array([0, 0, 1]), math.radians(180))
             for i, (xt, yt, zt) in enumerate(zip(mesh.x, mesh.y, mesh.z)):
                 t_m = get_transform_origin(stl_origins[mesh_name])
                 xt, yt, zt = transform_triangle(xt, yt, zt, t_m)
@@ -59,9 +66,32 @@ def transform_meshes(velma, meshes, stl_origins):
                 meshes[mesh_name].x[i] = xt
                 meshes[mesh_name].y[i] = yt
                 meshes[mesh_name].z[i] = zt
-            mesh.rotate([0,0,1], math.radians(180))
-
+                j += 1
+            #mesh.rotate([0,0,1], math.radians(180))
+    print(j)
     return meshes
+
+def transform_meshes_to_camera_frame(velma, meshes):
+    tf = velma.getTf('head_kinect_rgb_optical_frame', 'world')
+    for mesh_name, mesh in meshes.items():
+            for i, (xt, yt, zt) in enumerate(zip(mesh.x, mesh.y, mesh.z)):
+                xt, yt, zt = transform_triangle(xt, yt, zt, tf)
+                meshes[mesh_name].x[i] = xt
+                meshes[mesh_name].y[i] = yt
+                meshes[mesh_name].z[i] = zt
+    return meshes
+
+def move_head(velma):
+    print("moving head to position: down")
+    q_dest = (0, 1.0)
+    velma.moveHead(q_dest, 3.0, start_time=0.5)
+    if velma.waitForHead() != 0:
+        exitError(6)
+    rospy.sleep(0.5)
+    if not isHeadConfigurationClose(velma.getHeadCurrentConfiguration(), q_dest, 0.1):
+        exitError(7)
+
+
 
 
 if __name__ == "__main__":
@@ -72,7 +102,17 @@ if __name__ == "__main__":
     meshes = convert_paths_to_meshes(stl_paths)
 
     velma = Initializer.initialize_system()
+    rospy.sleep(0.5)
+    move_head(velma)
 
     meshes = transform_meshes(velma, meshes, stl_origins)
+    #publish_triangles(list(meshes.values()), "world")
+    rospy.sleep(1)
+    meshes = transform_meshes_to_camera_frame(velma, meshes)
+    publish_triangles(list(meshes.values()), "head_kinect_rgb_optical_frame")
 
-    publish_triangles(list(meshes.values()))
+    ray_trace(meshes.values(), RESOLUTION, FOCAL_LENGTH)
+
+
+
+

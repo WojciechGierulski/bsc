@@ -4,38 +4,53 @@ from velma_common import *
 from velma_kinematics.velma_ik_geom import KinematicsSolverVelma
 from rcprg_ros_utils import exitError
 from rcprg_planner import *
+import math
 
 
 class Initializer:
     @staticmethod
     def initialize_system():
 
-        print("Running python interface for Velma...")
+
         velma = VelmaInterface()
-        print("Waiting for VelmaInterface initialization...")
+
         if not velma.waitForInit(timeout_s=10.0):
-            print("Could not initialize VelmaInterface\n")
             exitError(1)
-        print("Initialization ok!\n")
+
+
+        if velma.enableMotors() != 0:
+            exitError(14)
+
+        velma.startHomingHP()
+        if velma.waitForHP() != 0:
+            exitError(14)
+
+        velma.startHomingHT()
+        if velma.waitForHT() != 0:
+            exitError(15)
 
         print("Motors must be enabled every time after the robot enters safe state.")
         print("If the motors are already enabled, enabling them has no effect.")
         print("Enabling motors...")
         if velma.enableMotors() != 0:
-            exitError(14)
+            exitError(2)
 
-        print("Also, head motors must be homed after start-up of the robot.")
-        print("Sending head pan motor START_HOMING command...")
-        velma.startHomingHP()
-        if velma.waitForHP() != 0:
-            exitError(14)
-        print("Head pan motor homing successful.")
+        print("Moving to the current position...")
+        js_start = velma.getLastJointState()
+        velma.moveJoint(js_start[1], 0.5, start_time=0.5, position_tol=15.0 / 180.0 * math.pi)
+        error = velma.waitForJoint()
+        if error != 0:
+            print("The action should have ended without error, but the error code is", error)
+            exitError(3)
 
-        print("Sending head tilt motor START_HOMING command...")
-        velma.startHomingHT()
-        if velma.waitForHT() != 0:
-            exitError(15)
-        print("Head tilt motor homing successful.")
+        print("moving head to position: 0")
+        q_dest = (0, 0)
+        velma.moveHead(q_dest, 3.0, start_time=0.5)
+        if velma.waitForHead() != 0:
+            exitError(4)
+        rospy.sleep(0.5)
+        if not isHeadConfigurationClose(velma.getHeadCurrentConfiguration(), q_dest, 0.1):
+            exitError(5)
         return velma
 
     @staticmethod
