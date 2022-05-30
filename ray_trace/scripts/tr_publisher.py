@@ -25,8 +25,8 @@ def test(velma):
         m.points = create_triangle([1, 0, 0.3], [1, 0, 0.7], [1, 0, 0.9])
         m.pose.orientation.z = 1
         m.header.frame_id = 'world'
-        m.color.a = 255
-        m.color.r = 255
+        m.color.a = 1
+        m.color.r = 1
         m.scale.x = 1
         m.scale.y = 1
         m.scale.z = 1
@@ -92,8 +92,8 @@ def publish_triangles(cuboids, frame="world"):
                 m.points = create_triangle(-xt, -yt, zt)
                 m.pose.orientation.z = 1
                 m.header.frame_id = frame
-                m.color.a = 255
-                m.color.r = 255
+                m.color.a = 1
+                m.color.r = 1
                 m.scale.x = 1
                 m.scale.y = 1
                 m.scale.z = 1
@@ -113,7 +113,7 @@ def publish_rays(rays, frame):
         markers = []
         marker_id = 0
         for i, ray in enumerate(rays):
-            if i % 100 == 0:
+            if i % 10000 == 0:
                 m = Marker()
                 m.id = marker_id
                 m.header.frame_id = frame

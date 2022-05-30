@@ -1,66 +1,24 @@
+#!/usr/bin/env python
+import numpy
 import numpy as np
+from geometry_msgs.msg import Point
+from ray_trace.msg import Triangle
 from tr_publisher import publish_rays
 import PyKDL
+import rospy
+from ray_trace.srv import *
+import trimesh
+import pyembree
 
 
-# Triangles intersections
-
-def get_bounding_box(mesh):
-    maxx = mesh.x.max()
-    minx = mesh.x.min()
-    maxy = mesh.y.max()
-    miny = mesh.y.min()
-    maxz = mesh.z.max()
-    minz = mesh.z.min()
-    return [minx, maxx, miny, maxy, minz, maxz]
-
-
-def ray_triangle_intersect(ray_origin, ray_vector, A, B, C):
-    E1 = B - A
-    E2 = C - A
-    N = np.cross(E1, E2)
-    det = -np.dot(ray_vector, N)
-    invdet = 1 / det
-    A0 = ray_origin - A
-    DA0 = np.cross(A0, ray_vector)
-    u = np.dot(E2, DA0) * invdet
-    v = -np.dot(E1, DA0) * invdet
-    t = np.dot(A0, N) * invdet
-    result = det >= 1e-6 and t >= 0.0 and u >= 0.0 and v >= 0.0 and (u + v) <= 1.0
-    if result:
-        return ray_origin + t * ray_vector
-    else:
-        return None
-
-
-def consider_z_buffer(intersections, z_min, z_max):
-    t1 = intersections[:, 2] > z_min
-    t2 = intersections[:, 2] < z_max
-    t = np.logical_and(t1, t2)
-    return intersections[t]
-
-
-def ray_trace(meshes, resolution, focal_length):
-    intersections = []
-    rays = generate_rays(resolution, focal_length)
+def ray_trace_call(meshes, resolution, focal_length):
+    rays, origins = generate_rays(resolution, focal_length)
     publish_rays(rays, "head_kinect_rgb_optical_frame")
-    i = 0
-    for ray in rays:
-        for mesh in meshes:
-            b_box = get_bounding_box(mesh)
-            if ray_bounding_box_intersection(PyKDL.Vector(b_box[0], b_box[2], b_box[4]),
-                                             PyKDL.Vector(b_box[1], b_box[3], b_box[5]), PyKDL.Vector(0, 0, 0),
-                                             PyKDL.Vector(ray[0], ray[1], ray[2])):
-                for xt, yt, zt in zip(mesh.x, mesh.y, mesh.z):
-                    A = np.array([xt[0], yt[0], zt[0]])
-                    B = np.array([xt[1], yt[1], zt[1]])
-                    C = np.array([xt[2], yt[2], zt[2]])
-                    intersect = ray_triangle_intersect(np.array([0, 0, 0]), ray, A, B, C)
-                    print(intersect, i)
-                    i += 1
-                    if intersect is not None:
-                        pass
-    print("end")
+    full_mesh, faces = convert_data(meshes)
+    full_mesh = trimesh.Trimesh(vertices=full_mesh, faces=faces, use_embree=True)
+    intersection_points, index_ray, index_tri = full_mesh.ray.intersects_location(origins, rays, multiple_hits=False)
+    print(intersection_points)
+    print("END")
 
 
 def generate_rays(resolution, focal_length):
@@ -72,12 +30,19 @@ def generate_rays(resolution, focal_length):
             ray = np.array([x_cord, y_cord, focal_length])
             rays[i, :] = ray
             i += 1
-    return rays
+    origins = np.zeros((len(rays), 3))
+    return rays, origins
 
 
-# Ray box intersections
-
-def ray_bounding_box_intersection(b1, b2, l1, l2):
-    return True
-
-# Bounding box intersections
+def convert_data(meshes):
+    full_mesh = np.zeros((0, 3))
+    for mesh in meshes:
+        x = numpy.reshape(mesh.x, (3 * len(mesh.x), 1))
+        y = numpy.reshape(mesh.y, (3 * len(mesh.y), 1))
+        z = numpy.reshape(mesh.x, (3 * len(mesh.z), 1))
+        part_mesh = np.concatenate((x, y, z), axis=1)
+        full_mesh = np.concatenate((full_mesh, part_mesh), axis=0)
+    faces = np.arange(0, len(full_mesh), 1)
+    print(full_mesh[0:10, :])
+    faces = faces.reshape((len(full_mesh) // 3, 3))
+    return full_mesh, faces

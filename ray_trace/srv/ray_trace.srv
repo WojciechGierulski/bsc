@@ -1,0 +1,5 @@
+ray_trace/Triangle[] triangles
+geometry_msgs/Point[] rays
+geometry_msgs/Point[] origins
+---
+geometry_msgs/Point[] intersections

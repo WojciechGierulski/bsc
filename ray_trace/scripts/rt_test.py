@@ -15,10 +15,11 @@ from velma_kinematics.velma_ik_geom import KinematicsSolverVelma
 from rcprg_ros_utils import exitError
 from Initializer import Initializer
 import math
-from ray_trace_maths import ray_trace
+from ray_trace_maths import ray_trace_call
 import sys
+import trimesh
 
-RESOLUTION = [80, 60]
+RESOLUTION = [400, 300]
 FOCAL_LENGTH = 693
 
 
@@ -33,6 +34,8 @@ def get_stl_dict(rt_path):
 def convert_paths_to_meshes(stl_paths):
     bounding_boxes = []
     for stl_name, stl_path in stl_paths.items():
+        a = trimesh.load(stl_path, force='mesh')
+        a.show()
         stl_mesh = mesh.Mesh.from_file(stl_path)
         stl_paths[stl_name] = stl_mesh
     return stl_paths
@@ -111,7 +114,7 @@ if __name__ == "__main__":
     meshes = transform_meshes_to_camera_frame(velma, meshes)
     publish_triangles(list(meshes.values()), "head_kinect_rgb_optical_frame")
 
-    ray_trace(meshes.values(), RESOLUTION, FOCAL_LENGTH)
+    ray_trace_call(np.array(meshes.values()), RESOLUTION, FOCAL_LENGTH)
 
 
 

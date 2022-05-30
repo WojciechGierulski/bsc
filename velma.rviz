@@ -7,11 +7,12 @@ Panels:
         - /Global Options1
         - /Status1
         - /RobotModel1
+        - /MarkerArray1
         - /MarkerArray1/Status1
         - /Axes1
-        - /InteractiveMarkers1
-        - /Axes2
-        - /MarkerArray4
+        - /MarkerArray2
+        - /MarkerArray3
+        - /PointCloud22
       Splitter Ratio: 0.5
     Tree Height: 1075
   - Class: rviz/Selection
@@ -385,31 +386,22 @@ Visualization Manager:
       Marker Topic: /stll
       Name: MarkerArray
       Namespaces:
-        "": true
+        {}
       Queue Size: 100
       Value: true
     - Class: rviz/Axes
-      Enabled: true
+      Enabled: false
       Length: 0.5
       Name: Axes
       Radius: 0.009999999776482582
       Reference Frame: head_kinect_rgb_link
-      Value: true
-    - Class: rviz/InteractiveMarkers
-      Enable Transparency: true
-      Enabled: true
-      Name: InteractiveMarkers
-      Show Axes: false
-      Show Descriptions: true
-      Show Visual Aids: false
-      Update Topic: /int_markers_cimp_right/update
-      Value: true
+      Value: false
     - Class: rviz/MarkerArray
       Enabled: true
       Marker Topic: /camera_frustum
       Name: MarkerArray
       Namespaces:
-        head_kinect_rgb_optical_frame: true
+        {}
       Queue Size: 100
       Value: true
     - Alpha: 1
@@ -463,6 +455,43 @@ Visualization Manager:
         {}
       Queue Size: 100
       Value: true
+    - Class: rviz/InteractiveMarkers
+      Enable Transparency: true
+      Enabled: true
+      Name: InteractiveMarkers
+      Show Axes: false
+      Show Descriptions: true
+      Show Visual Aids: false
+      Update Topic: /int_markers_jimp/update
+      Value: true
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Min Color: 0; 0; 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0020000000949949026
+      Style: Flat Squares
+      Topic: /head_kinect/depth_registered/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 48; 48; 48
@@ -491,25 +520,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.8447608947753906
+      Distance: 0.5370849967002869
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 1.0415723323822021
-        Y: -0.1785096526145935
-        Z: 1.1984672546386719
+        X: 0.743317723274231
+        Y: -0.13806936144828796
+        Z: 1.3120285272598267
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.2347962856292725
+      Pitch: 0.4697975814342499
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 5.575408458709717
+      Yaw: 3.190356969833374
     Saved: ~
 Window Geometry:
   Displays:
