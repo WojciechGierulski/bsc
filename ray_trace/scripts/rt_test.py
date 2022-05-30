@@ -19,7 +19,7 @@ from ray_trace_maths import ray_trace_call
 import sys
 import trimesh
 
-RESOLUTION = [400, 300]
+RESOLUTION = [800, 600]
 FOCAL_LENGTH = 693
 
 
@@ -34,9 +34,7 @@ def get_stl_dict(rt_path):
 def convert_paths_to_meshes(stl_paths):
     bounding_boxes = []
     for stl_name, stl_path in stl_paths.items():
-        a = trimesh.load(stl_path, force='mesh')
-        a.show()
-        stl_mesh = mesh.Mesh.from_file(stl_path)
+        stl_mesh = trimesh.load(stl_path, force='mesh')
         stl_paths[stl_name] = stl_mesh
     return stl_paths
 
@@ -55,33 +53,42 @@ def get_transform_origin(origin):
     r = PyKDL.Rotation.RPY(origin["rpy"][0], origin["rpy"][1], origin["rpy"][2])
     return PyKDL.Frame(r, p)
 
+def frame_to_tf_matrix(frame):
+    matrix = np.zeros((4, 4))
+    matrix[0, 0] = frame.M[0, 0]
+    matrix[1, 0] = frame.M[1, 0]
+    matrix[0, 1] = frame.M[0, 1]
+    matrix[1, 1] = frame.M[1, 1]
+    matrix[2, 0] = frame.M[2, 0]
+    matrix[2, 1] = frame.M[2, 1]
+    matrix[2, 2] = frame.M[2, 2]
+    matrix[0, 2] = frame.M[0, 2]
+    matrix[1, 2] = frame.M[1, 2]
+    matrix[0, 3] = frame.p.x()
+    matrix[1, 3] = frame.p.y()
+    matrix[2 ,3] = frame.p.z()
+    matrix[3, 3] = 1
+    return matrix
+
+
+
 
 def transform_meshes(velma, meshes, stl_origins):
-    j=0
     for mesh_name, mesh in meshes.items():
             tf = velma.getTf('world', mesh_name)
-            t = tf.p
-            r, p, y = tf.M.GetRPY()
-            for i, (xt, yt, zt) in enumerate(zip(mesh.x, mesh.y, mesh.z)):
-                t_m = get_transform_origin(stl_origins[mesh_name])
-                xt, yt, zt = transform_triangle(xt, yt, zt, t_m)
-                xt, yt, zt = transform_triangle(xt, yt, zt, tf)
-                meshes[mesh_name].x[i] = xt
-                meshes[mesh_name].y[i] = yt
-                meshes[mesh_name].z[i] = zt
-                j += 1
-            #mesh.rotate([0,0,1], math.radians(180))
-    print(j)
+            tf_m = get_transform_origin(stl_origins[mesh_name])
+            tf = frame_to_tf_matrix(tf)
+            tf_m = frame_to_tf_matrix(tf_m)
+            meshes[mesh_name] = mesh.apply_transform(tf_m)
+            meshes[mesh_name] = mesh.apply_transform(tf)
     return meshes
+
 
 def transform_meshes_to_camera_frame(velma, meshes):
     tf = velma.getTf('head_kinect_rgb_optical_frame', 'world')
+    tf = frame_to_tf_matrix(tf)
     for mesh_name, mesh in meshes.items():
-            for i, (xt, yt, zt) in enumerate(zip(mesh.x, mesh.y, mesh.z)):
-                xt, yt, zt = transform_triangle(xt, yt, zt, tf)
-                meshes[mesh_name].x[i] = xt
-                meshes[mesh_name].y[i] = yt
-                meshes[mesh_name].z[i] = zt
+        meshes[mesh_name] = mesh.apply_transform(tf)
     return meshes
 
 def move_head(velma):
@@ -94,6 +101,9 @@ def move_head(velma):
     if not isHeadConfigurationClose(velma.getHeadCurrentConfiguration(), q_dest, 0.1):
         exitError(7)
 
+def merge_meshes(meshes):
+    meshes = [mesh for mesh in meshes.values()]
+    return trimesh.util.concatenate(meshes)
 
 
 
@@ -109,12 +119,12 @@ if __name__ == "__main__":
     move_head(velma)
 
     meshes = transform_meshes(velma, meshes, stl_origins)
-    #publish_triangles(list(meshes.values()), "world")
+    publish_triangles(meshes)
     rospy.sleep(1)
     meshes = transform_meshes_to_camera_frame(velma, meshes)
-    publish_triangles(list(meshes.values()), "head_kinect_rgb_optical_frame")
-
-    ray_trace_call(np.array(meshes.values()), RESOLUTION, FOCAL_LENGTH)
+    publish_triangles(meshes, "head_kinect_rgb_optical_frame")
+    full_mesh = merge_meshes(meshes)
+    ray_trace_call(full_mesh, RESOLUTION, FOCAL_LENGTH)
 
 
 

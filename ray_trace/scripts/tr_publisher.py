@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 from geometry_msgs.msg import Point, PointStamped
+from std_msgs.msg import ColorRGBA
 from visualization_msgs.msg import MarkerArray, Marker
 import rospy
 import PyKDL
@@ -43,7 +44,7 @@ def test(velma):
         m = Marker()
         m.id = 1
         m.points = create_triangle(x,y,z)
-        m.pose.orientation.z = 1
+        m.pose.orientation.w = 1
         m.header.frame_id = 'head_kinect_rgb_optical_frame'
         m.color.a = 255
         m.color.r = 255
@@ -56,13 +57,13 @@ def test(velma):
         rate.sleep()
 
 
-def create_triangle(x, y, z):
+def create_triangle(triangle):
     pts = []
     for i in range(0, 3):
         p = Point()
-        p.x = x[i]
-        p.y = y[i]
-        p.z = z[i]
+        p.x = triangle[i, 0]
+        p.y = triangle[i, 1]
+        p.z = triangle[i, 2]
         pts.append(p)
     return pts
 
@@ -79,18 +80,18 @@ def create_points(ray):
 
 
 
-def publish_triangles(cuboids, frame="world"):
+def publish_triangles(meshes, frame="world"):
     pub = rospy.Publisher('stll', MarkerArray, queue_size=100)
     rate = rospy.Rate(10)
     for _ in range(10):
-        markers = []
         marker_id = 0
-        for cuboid in cuboids:
-            for i, (xt, yt, zt) in enumerate(zip(cuboid.x, cuboid.y, cuboid.z)):
+        markers = []
+        for mesh in meshes.values():
+            for triangle in mesh.triangles:
                 m = Marker()
                 m.id = marker_id
-                m.points = create_triangle(-xt, -yt, zt)
-                m.pose.orientation.z = 1
+                m.points = create_triangle(triangle)
+                m.pose.orientation.w = 1
                 m.header.frame_id = frame
                 m.color.a = 1
                 m.color.r = 1
@@ -129,4 +130,25 @@ def publish_rays(rays, frame):
         msg = MarkerArray()
         msg.markers = markers
         pub.publish(msg)
+        rate.sleep()
+
+def publish_points(points, frame="head_kinect_rgb_optical_frame"):
+    pub = rospy.Publisher('intersections', Marker, queue_size=100)
+    rate = rospy.Rate(10)
+    for _ in range(10):
+        m = Marker()
+        m.header.frame_id = frame
+        m.scale.x = 0.0025
+        m.scale.y = 0.0025
+        m.color.a = 255
+        m.type = 8
+        points_pub = []
+        for point in points:
+            p = Point()
+            p.x = point[0]
+            p.y = point[1]
+            p.z = point[2]
+            points_pub.append(p)
+        m.points = points_pub
+        pub.publish(m)
         rate.sleep()
