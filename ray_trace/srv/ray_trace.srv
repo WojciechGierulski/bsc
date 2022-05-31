@@ -1,4 +1,5 @@
-ray_trace/Triangle[] triangles
+geometry_msgs/Point[] vertices
+geometry_msgs/Point[] faces
 geometry_msgs/Point[] rays
 geometry_msgs/Point[] origins
 ---

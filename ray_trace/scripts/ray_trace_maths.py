@@ -19,7 +19,7 @@ def ray_trace_call(mesh, resolution, focal_length):
     intersection_points, index_ray, index_tri = mesh.ray.intersects_location(origins, rays, multiple_hits=False)
     end = time.time()
     print(end - start)
-    publish_points(intersection_points)
+    return intersection_points
 
 
 def generate_rays(resolution, focal_length):
