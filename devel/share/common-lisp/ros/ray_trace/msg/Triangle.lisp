@@ -1,0 +1,1 @@
+/home/wgieruls/Desktop/bsc/devel/.private/ray_trace/share/common-lisp/ros/ray_trace/msg/Triangle.lisp

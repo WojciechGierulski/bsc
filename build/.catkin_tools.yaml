@@ -1,0 +1,6 @@
+devel_space: /home/wgieruls/Desktop/bsc/devel
+install: false
+install_space: /home/wgieruls/Desktop/bsc/install
+profile: default
+source_space: /home/wgieruls/Desktop/bsc/src
+workspace: /home/wgieruls/Desktop/bsc

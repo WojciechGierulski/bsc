@@ -1,0 +1,218 @@
+{
+  "right_arm_1_link_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      -0.008
+    ],
+    "rpy": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "right_arm_2_link_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rpy": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "right_arm_3_link_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      -0.008
+    ],
+    "rpy": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "right_arm_4_link_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rpy": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "right_arm_5_link_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      -0.008
+    ],
+    "rpy": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "right_arm_6_link_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rpy": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "right_arm_7_link_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rpy": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "right_gripper_mount_link_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rpy": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "right_gripper_mount_link_1": {
+    "xyz": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rpy": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "right_HandPalmLink_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rpy": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "right_HandFingerThreeKnuckleTwoLink_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rpy": [
+      3.14159265359,
+      1.57079632679,
+      0.0
+    ]
+  },
+  "right_HandFingerThreeKnuckleThreeLink_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rpy": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "right_HandFingerOneKnuckleOneLink_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      -0.0045
+    ],
+    "rpy": [
+      1.57079632679,
+      0.0,
+      -1.57079632679
+    ]
+  },
+  "right_HandFingerOneKnuckleTwoLink_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rpy": [
+      3.14159265359,
+      1.57079632679,
+      0.0
+    ]
+  },
+  "right_HandFingerOneKnuckleThreeLink_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rpy": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "right_HandFingerTwoKnuckleOneLink_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      -0.0045
+    ],
+    "rpy": [
+      1.57079632679,
+      0.0,
+      -1.57079632679
+    ]
+  },
+  "right_HandFingerTwoKnuckleTwoLink_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rpy": [
+      3.14159265359,
+      1.57079632679,
+      0.0
+    ]
+  },
+  "right_HandFingerTwoKnuckleThreeLink_0": {
+    "xyz": [
+      0.0,
+      0.0,
+      0.0
+    ],
+    "rpy": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  }
+}

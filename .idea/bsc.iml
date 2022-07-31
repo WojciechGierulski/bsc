@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/msg" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/scripts" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/srv" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/stl_data" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/src/urdf" isTestSource="false" />
+    </content>
+    <content url="file:///opt/ros/melodic/lib/python2.7/dist-packages" />
+    <orderEntry type="jdk" jdkName="Python 2.7 (bsc)" jdkType="Python SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="workspace" level="project" />
+    <orderEntry type="library" name="ROS" level="project" />
+    <orderEntry type="library" name="workspace" level="project" />
+    <orderEntry type="library" name="ROS" level="project" />
+    <orderEntry type="library" name="workspace" level="project" />
+    <orderEntry type="library" name="ROS" level="project" />
+    <orderEntry type="library" name="workspace" level="project" />
+    <orderEntry type="library" name="ROS" level="project" />
+    <orderEntry type="library" name="workspace" level="project" />
+    <orderEntry type="library" name="ROS" level="project" />
+    <orderEntry type="library" name="workspace" level="project" />
+    <orderEntry type="library" name="ROS" level="project" />
+    <orderEntry type="library" name="workspace" level="project" />
+    <orderEntry type="library" name="ROS" level="project" />
+    <orderEntry type="library" name="workspace" level="project" />
+    <orderEntry type="library" name="ROS" level="project" />
+  </component>
+  <component name="PyDocumentationSettings">
+    <option name="format" value="PLAIN" />
+    <option name="myDocStringFormat" value="Plain" />
+    <option name="renderExternalDocumentation" value="true" />
+  </component>
+</module>

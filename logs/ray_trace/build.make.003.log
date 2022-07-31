@@ -1,0 +1,21 @@
+[  0%] Built target geometry_msgs_generate_messages_py
+[  0%] Built target std_msgs_generate_messages_nodejs
+[  0%] Built target geometry_msgs_generate_messages_nodejs
+[  0%] Built target std_msgs_generate_messages_py
+[  0%] Built target geometry_msgs_generate_messages_lisp
+[  0%] Built target geometry_msgs_generate_messages_cpp
+[  0%] Built target std_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_lisp
+[  0%] Built target geometry_msgs_generate_messages_eus
+[  0%] Built target std_msgs_generate_messages_cpp
+[  0%] Built target _ray_trace_generate_messages_check_deps_Triangle
+[  0%] Built target _ray_trace_generate_messages_check_deps_ray_trace
+[ 30%] Built target ray_trace_generate_messages_py
+[ 46%] Built target ray_trace_generate_messages_nodejs
+[ 53%] [34m[1mGenerating C++ code from ray_trace/ray_trace.srv[0m
+[ 76%] Built target ray_trace_generate_messages_eus
+[ 84%] [34m[1mGenerating C++ code from ray_trace/Triangle.msg[0m
+[100%] Built target ray_trace_generate_messages_lisp
+[100%] Built target ray_trace_generate_messages_cpp
+[35m[1mScanning dependencies of target ray_trace_generate_messages[0m
+[100%] Built target ray_trace_generate_messages

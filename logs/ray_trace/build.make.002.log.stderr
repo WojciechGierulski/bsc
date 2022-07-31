@@ -1,0 +1,31 @@
+Traceback (most recent call last):
+  File "/opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py", line 50, in <module>
+    sys.argv, msg_template_map, srv_template_map)
+  File "/opt/ros/melodic/lib/python2.7/dist-packages/genmsg/template_tools.py", line 213, in generate_from_command_line_options
+    generate_from_file(argv[1], options.package, options.outdir, options.emdir, options.includepath, msg_template_dict, srv_template_dict)
+  File "/opt/ros/melodic/lib/python2.7/dist-packages/genmsg/template_tools.py", line 154, in generate_from_file
+    _generate_msg_from_file(input_file, output_dir, template_dir, search_path, package_name, msg_template_dict)
+  File "/opt/ros/melodic/lib/python2.7/dist-packages/genmsg/template_tools.py", line 99, in _generate_msg_from_file
+    search_path)
+  File "/opt/ros/melodic/lib/python2.7/dist-packages/genmsg/template_tools.py", line 77, in _generate_from_spec
+    interpreter = em.Interpreter(output=ofile, globals=g, options={em.RAW_OPT:True,em.BUFFERED_OPT:True})
+AttributeError: 'module' object has no attribute 'Interpreter'
+make[2]: *** [/home/wgieruls/Desktop/bsc/devel/.private/ray_trace/include/ray_trace/Triangle.h] Error 1
+make[2]: *** Deleting file '/home/wgieruls/Desktop/bsc/devel/.private/ray_trace/include/ray_trace/Triangle.h'
+make[2]: *** Waiting for unfinished jobs....
+Traceback (most recent call last):
+  File "/opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py", line 50, in <module>
+    sys.argv, msg_template_map, srv_template_map)
+  File "/opt/ros/melodic/lib/python2.7/dist-packages/genmsg/template_tools.py", line 213, in generate_from_command_line_options
+    generate_from_file(argv[1], options.package, options.outdir, options.emdir, options.includepath, msg_template_dict, srv_template_dict)
+  File "/opt/ros/melodic/lib/python2.7/dist-packages/genmsg/template_tools.py", line 156, in generate_from_file
+    _generate_srv_from_file(input_file, output_dir, template_dir, search_path, package_name, srv_template_dict, msg_template_dict)
+  File "/opt/ros/melodic/lib/python2.7/dist-packages/genmsg/template_tools.py", line 115, in _generate_srv_from_file
+    search_path)
+  File "/opt/ros/melodic/lib/python2.7/dist-packages/genmsg/template_tools.py", line 77, in _generate_from_spec
+    interpreter = em.Interpreter(output=ofile, globals=g, options={em.RAW_OPT:True,em.BUFFERED_OPT:True})
+AttributeError: 'module' object has no attribute 'Interpreter'
+make[2]: *** [/home/wgieruls/Desktop/bsc/devel/.private/ray_trace/include/ray_trace/ray_trace.h] Error 1
+make[2]: *** Deleting file '/home/wgieruls/Desktop/bsc/devel/.private/ray_trace/include/ray_trace/ray_trace.h'
+make[1]: *** [CMakeFiles/ray_trace_generate_messages_cpp.dir/all] Error 2
+make: *** [all] Error 2

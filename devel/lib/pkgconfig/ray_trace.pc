@@ -1,0 +1,1 @@
+/home/wgieruls/Desktop/bsc/devel/.private/ray_trace/lib/pkgconfig/ray_trace.pc

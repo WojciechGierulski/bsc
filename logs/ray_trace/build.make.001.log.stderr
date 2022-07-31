@@ -1,0 +1,17 @@
+Traceback (most recent call last):
+  File "/opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py", line 43, in <module>
+    import genmsg.template_tools
+  File "/opt/ros/melodic/lib/python2.7/dist-packages/genmsg/template_tools.py", line 39, in <module>
+    import em
+ImportError: No module named em
+make[2]: *** [/home/wgieruls/Desktop/bsc/devel/.private/ray_trace/include/ray_trace/ray_trace.h] Error 1
+make[2]: *** Waiting for unfinished jobs....
+Traceback (most recent call last):
+  File "/opt/ros/melodic/share/gencpp/cmake/../../../lib/gencpp/gen_cpp.py", line 43, in <module>
+    import genmsg.template_tools
+  File "/opt/ros/melodic/lib/python2.7/dist-packages/genmsg/template_tools.py", line 39, in <module>
+    import em
+ImportError: No module named em
+make[2]: *** [/home/wgieruls/Desktop/bsc/devel/.private/ray_trace/include/ray_trace/Triangle.h] Error 1
+make[1]: *** [CMakeFiles/ray_trace_generate_messages_cpp.dir/all] Error 2
+make: *** [all] Error 2
