@@ -1,1 +1,0 @@
-/home/wgieruls/Desktop/bsc/devel/.private/ray_trace/share/roseus/ros/ray_trace/msg/Triangle.l

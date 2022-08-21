@@ -16,48 +16,6 @@ def transform_triangle(xt, yt, zt, tf):
     return xt, yt, zt
 
 
-def test(velma):
-    pub = rospy.Publisher('test', MarkerArray, queue_size=100)
-    rate = rospy.Rate(10)
-    for _ in range(100):
-        print("a")
-        msg = MarkerArray()
-        m = Marker()
-        m.id = 1
-        m.points = create_triangle([1, 0, 0.3], [1, 0, 0.7], [1, 0, 0.9])
-        m.pose.orientation.z = 1
-        m.header.frame_id = 'world'
-        m.color.a = 1
-        m.color.r = 1
-        m.scale.x = 1
-        m.scale.y = 1
-        m.scale.z = 1
-        m.type = 11
-        msg.markers = [m]
-        pub.publish(msg)
-        rate.sleep()
-    tf = velma.getTf('head_kinect_rgb_optical_frame', 'world')
-    x, y, z = transform_triangle([0.5, 0.7, 0.8], [0.4, 0.2, 0.3], [0.8, 0.6, 0.2], tf)
-    rospy.sleep(2)
-    for _ in range(10):
-        break
-        msg = MarkerArray()
-        m = Marker()
-        m.id = 1
-        m.points = create_triangle(x, y, z)
-        m.pose.orientation.w = 1
-        m.header.frame_id = 'head_kinect_rgb_optical_frame'
-        m.color.a = 255
-        m.color.r = 255
-        m.scale.x = 1
-        m.scale.y = 1
-        m.scale.z = 1
-        m.type = 11
-        msg.markers = [m]
-        pub.publish(msg)
-        rate.sleep()
-
-
 def create_triangle(triangle):
     pts = []
     for i in range(0, 3):

@@ -1,0 +1,7 @@
+{
+  "resolution": [800, 600],
+  "focal_length": 693,
+  "pc_topic": "/head_kinect/depth/points",
+  "world_frame": "world",
+  "camera_frame": "head_kinect_rgb_optical_frame"
+}

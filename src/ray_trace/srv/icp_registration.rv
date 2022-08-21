@@ -1,4 +1,0 @@
-geometry_msgs/Point[] model_pc
-geometry_msgs/Point[] camera_pc
----
-std_msgs/Float32 transformation

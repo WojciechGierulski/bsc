@@ -1,1 +1,0 @@
-/home/wgieruls/Desktop/bsc/devel/.private/ray_trace/share/ray_trace/cmake/ray_traceConfig-version.cmake

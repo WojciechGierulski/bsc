@@ -1,1 +1,0 @@
-/home/wgieruls/Desktop/bsc/devel/.private/ray_trace/share/roseus/ros/ray_trace/srv/ray_trace.l

@@ -1,0 +1,8 @@
+.catkin_tools
+.idea
+**/.idea/
+devel/
+logs/
+build/
+**/__pycache__/
+**/*.pyc

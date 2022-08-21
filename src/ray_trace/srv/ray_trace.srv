@@ -1,6 +1,4 @@
-geometry_msgs/Point[] vertices
-geometry_msgs/Point[] faces
-geometry_msgs/Point[] rays
-geometry_msgs/Point[] origins
+std_msgs/Bool publish_results
 ---
-geometry_msgs/Point[] intersections
+std_msgs/Int16 status
+geometry_msgs/Transform transform

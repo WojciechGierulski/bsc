@@ -2,7 +2,6 @@
 import numpy
 import numpy as np
 from geometry_msgs.msg import Point
-from ray_trace.msg import Triangle
 from tr_publisher import publish_rays, publish_points
 import PyKDL
 import rospy
@@ -18,7 +17,8 @@ def ray_trace_call(mesh, resolution, focal_length):
     start = time.time()
     intersection_points, index_ray, index_tri = mesh.ray.intersects_location(origins, rays, multiple_hits=False)
     end = time.time()
-    print(end - start)
+    t = str(end-start)
+    print( "Time taken: " + t )
     return intersection_points
 
 
