@@ -13,8 +13,6 @@ import json
 class Initializer:
     @staticmethod
     def initialize_system():
-
-
         velma = VelmaInterface()
 
         if not velma.waitForInit(timeout_s=10.0):

@@ -14,6 +14,13 @@ from sensor_msgs.msg import PointCloud2
 from ray_trace.srv import ray_trace
 from tf_maths import tf_msg_to_matrix
 from std_msgs.msg import Bool
+from Initializer import Initializer
+from GripperMoves import GripperMoves
+from JointImpMoves import JointImpMoves
+from EnvScanner import EnvScanner
+
+
+OCTOMAP_TYPE = "ONLINE"
 
 def get_tf_matrix(publish=False):
     rospy.wait_for_service('ray_trace')
@@ -38,9 +45,27 @@ if __name__ == "__main__":
     rospack = rospkg.RosPack()
     rt_path = rospack.get_path("ray_trace")
 
-    #velma = Initializer.initialize_system()
+    print("Initializing system")
+    velma = Initializer.initialize_system()
+    solver = Initializer.get_solver()
+    planner = Initializer.get_planner(velma)
+    GripperMoves.close_grippers(velma, 'both')
+    JointImpMoves.move_to_init_pos(velma, planner)
+
+    #print("Moving to init position")
     #Initializer.move_to_init_pose(velma, rt_path)
-    rospy.sleep(0.1)
+
+
+    if OCTOMAP_TYPE == "ONLINE":
+        print("Scanning Env")
+        EnvScanner.scan_env(velma)
+
+    sys.exit(0)
+
+    print("Processing octomap")
+    octomap = Initializer.get_octomap()
+    Initializer.process_octomap(planner, octomap)
+
 
     tf_matrix = get_tf_matrix(True)
     print tf_matrix

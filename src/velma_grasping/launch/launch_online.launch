@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<launch>
+
+  <arg name="use_kinect" default="true" />
+  <arg name="use_stereo_pair" default="false" />
+  <arg name="world_name" default="$(find velma_grasping)/worlds/test_world1.world" />
+  <arg name="GAZEBO_MODEL_PATH" default="" />
+  <arg name="GAZEBO_RESOURCE_PATH" default="" />
+  <arg name="profile" default="dart_2ms" />
+
+  <arg name="state_snapshot" default="$(find velma_sim_gazebo)/config/initial_state.txt" />
+  <arg name="spawn_velma" default="true"/>
+
+  <arg name="ORO_LOGLEVEL" default="3"/>
+
+  <arg name="mobile_base" default="false"/>
+  <arg name="run_steps" default="-1"/>
+  <arg name="gui" default="false"/>
+
+  <arg name="use_gpu_ray" default="true"/>
+
+  <arg name="collision_detector" default="dart"/>
+
+  <!-- <param
+    name="/robot_description"
+    command="$(find xacro)/xacro
+      '$(find velma_description)/robots/velma.urdf.xacro'
+      subsystem_xml:=true
+      xml_file_re_body:='$(find velma_sim_gazebo)/config/velma_core_re.xml'
+      use_gazebo_kinect:=$(arg use_kinect)
+      use_stereo_pair:=$(arg use_stereo_pair)"
+  />
+  <param
+    name="/robot_description_semantic"
+    command="$(find xacro)/xacro '$(find velma_description)/robots/velma.srdf'"
+  /> -->
+
+  <include file="$(find velma_common)/launch/velma_system.launch">
+    <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
+    <arg name="world_name" value="$(arg world_name)" />
+    <arg name="use_kinect" value="$(arg use_kinect)" />
+    <arg name="use_stereo_pair" value="$(arg use_stereo_pair)" />
+    <arg name="gui" value="$(arg gui)" />
+    <arg name="GAZEBO_MODEL_PATH" value="$(arg GAZEBO_MODEL_PATH):$(find velma_grasping)/data/gazebo/models" />
+    <arg name="GAZEBO_RESOURCE_PATH" value="$(arg GAZEBO_RESOURCE_PATH):$(find velma_grasping)/data/gazebo" />
+    <arg name="profile" value="$(arg profile)" />
+    <arg name="state_snapshot" value="$(arg state_snapshot)" />
+    <arg name="spawn_velma" value="$(arg spawn_velma)" />
+    <arg name="ORO_LOGLEVEL" value="$(arg ORO_LOGLEVEL)" />
+    <arg name="mobile_base" value="$(arg mobile_base)" />
+    <arg name="run_steps" value="$(arg run_steps)" />
+    <arg name="use_gpu_ray" value="$(arg use_gpu_ray)" />
+    <arg name="collision_detector" value="$(arg collision_detector)" />
+  </include>
+
+  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
+    <arg name='link_name' value='table_b::link'/>
+    <arg name='frame_id' value='table'/>
+  </include>
+
+  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
+    <arg name='link_name' value='Pen2::link_0'/>
+    <arg name='frame_id' value='Pen2' />
+  </include>
+
+  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
+    <arg name='link_name' value='Pen1::link_1'/>
+    <arg name='frame_id' value='Pen1' />
+  </include>
+
+  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
+    <arg name='link_name' value='BoxSquare::link_0'/>
+    <arg name='frame_id' value='BoxSquare' />
+  </include>
+
+  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
+    <arg name='link_name' value='Cola::link_2'/>
+    <arg name='frame_id' value='Cola' />
+  </include>
+
+  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
+    <arg name='link_name' value='Rubber::link_3'/>
+    <arg name='frame_id' value='Rubber' />
+  </include>
+
+  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
+    <arg name='link_name' value='Mug::link_0'/>
+    <arg name='frame_id' value='Mug' />
+  </include>
+
+  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
+    <arg name='link_name' value='GlassWine::link_3'/>
+    <arg name='frame_id' value='GlassWine' />
+  </include>
+
+  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
+    <arg name='link_name' value='BoxLong::link_1'/>
+    <arg name='frame_id' value='BoxLong' />
+  </include>
+
+  <include file='$(find velma_common)/launch/octomap_server.launch'>
+  </include>
+
+</launch>

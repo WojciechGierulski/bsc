@@ -36,7 +36,11 @@ def get_tf(src, dst):
     return PyKDL.Frame(PyKDL.Rotation.Quaternion(rot[0], rot[1], rot[2], rot[3]), PyKDL.Vector(pos[0], pos[1], pos[2]))
 
 
-msg = rospy.wait_for_message("/head_kinect/depth_registered/points", PointCloud2, timeout=None)
+
+# /head_kinect/depth/points
+# /head_kinect/depth_registered/points
+
+msg = rospy.wait_for_message("/head_kinect/depth/points", PointCloud2, timeout=None)
 rgb = ros_numpy.numpify(msg)
 #xyz_array = ros_numpy.point_cloud2.pointcloud2_to_xyz_array(msg, remove_nans=False)
 
@@ -47,10 +51,11 @@ transform2 = frame_to_tf_matrix(get_tf("world", "head_kinect_rgb_optical_frame")
 print transform2.shape
 
 
-with open('3.pickle', 'wb') as handle:
+with open('4_sim.pickle', 'wb') as handle:
     pickle.dump(arr, handle, protocol=pickle.HIGHEST_PROTOCOL)
-with open("3_tf1.pickle", 'wb') as handle:
+with open("4_sim_tf1.pickle", 'wb') as handle:
     pickle.dump(transform1, handle, protocol=pickle.HIGHEST_PROTOCOL)
-with open("3_tf2.pickle", 'wb') as handle:
+with open("4_sim_tf2.pickle", 'wb') as handle:
     pickle.dump(transform2, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
+print "finished"
