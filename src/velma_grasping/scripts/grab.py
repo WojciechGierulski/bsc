@@ -38,7 +38,7 @@ if __name__ == "__main__":
     rospack = rospkg.RosPack()
     rt_path = rospack.get_path("ray_trace")
 
-    velma = Initializer.initialize_system()
+    #velma = Initializer.initialize_system()
     #Initializer.move_to_init_pose(velma, rt_path)
     rospy.sleep(0.1)
 
