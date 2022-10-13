@@ -1,0 +1,8 @@
+BoxLong
+BoxSquare
+Cola
+Mug
+Pen1
+Pen2
+GlassWine
+Rubber
