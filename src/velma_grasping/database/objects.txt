@@ -1,8 +1,7 @@
-BoxLong
-BoxSquare
-Cola
-Mug
-Pen1
-Pen2
-GlassWine
-Rubber
+0
+1
+2
+3
+4
+5
+6

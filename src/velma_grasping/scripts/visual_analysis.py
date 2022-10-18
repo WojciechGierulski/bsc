@@ -1,3 +1,4 @@
+import sys
 import time
 
 import numpy as np
@@ -148,26 +149,36 @@ def classify(cluster, db):
     scores = []
     transforms = []
     names = []
+    cluster.points = o3d.utility.Vector3dVector(np.asarray(cluster.points) - cluster.get_center())
+    o3d.visualization.draw_geometries([cluster])
     for i, (key, value) in enumerate(zip(keys, values)):
-        voxel_size = 0.006
+        voxel_size = 0.004
         object_pc = value.pc
-        source, target, source_down, target_down, source_fpfh, target_fpfh = prepare_dataset(voxel_size, cluster, object_pc)
+        source, target, source_down, target_down, source_fpfh, target_fpfh = prepare_dataset(voxel_size, object_pc, cluster)
+        if not compare_bboxes(source, target): #boxes not similar:
+            transforms.append(None)
+            scores.append(0)
+            names.append(None)
+            continue
         start = time.time()
         result_global = execute_global_registration(source_down, target_down, source_fpfh, target_fpfh, voxel_size)
+        print(result_global)
+        draw_registration_result(source_down, target_down, result_global.transformation)
         print(f"Global: {time.time()-start}")
         if result_global.fitness < 0.01:
             transforms.append(None)
             scores.append(0)
             names.append(None)
+            continue
         else:
-            #draw_registration_result(source_down, target_down, result_global.transformation)
             start = time.time()
-            result_local = refine_registration(source.voxel_down_sample(0.003), target.voxel_down_sample(0.003), voxel_size, result_global.transformation)
+            result_local = refine_registration(source, target, voxel_size, result_global.transformation)
             print(f"Local: {time.time()-start}")
             transforms.append(result_local.transformation)
             scores.append(result_local.fitness)
             names.append(value.name)
-        #draw_registration_result(source, target, result_local.transformation)
+            print(result_local)
+            draw_registration_result(source, target, result_local.transformation)
         max_fitness = max(scores)
         i = scores.index(max_fitness)
         transform = transforms[i]
@@ -177,11 +188,11 @@ def classify(cluster, db):
 
 def preprocess_point_cloud(pcd, voxel_size):
     pcd_down = pcd.voxel_down_sample(voxel_size)
-    radius_normal = voxel_size * 2
+    radius_normal = voxel_size * 1.5
     pcd.estimate_normals(
-        o3d.geometry.KDTreeSearchParamHybrid(radius=radius_normal, max_nn=8))
+        o3d.geometry.KDTreeSearchParamHybrid(radius=radius_normal, max_nn=30))
     pcd_down.estimate_normals(
-        o3d.geometry.KDTreeSearchParamHybrid(radius=radius_normal, max_nn=8))
+        o3d.geometry.KDTreeSearchParamHybrid(radius=radius_normal, max_nn=30))
     pcd.orient_normals_to_align_with_direction(
         orientation_reference=np.array([0., 0., 1.])
     )
@@ -189,10 +200,10 @@ def preprocess_point_cloud(pcd, voxel_size):
         orientation_reference=np.array([0., 0., 1.])
     )
 
-    radius_feature = voxel_size * 15
+    radius_feature = voxel_size * 5
     pcd_fpfh = o3d.pipelines.registration.compute_fpfh_feature(
         pcd_down,
-        o3d.geometry.KDTreeSearchParamHybrid(radius=radius_feature, max_nn=8))
+        o3d.geometry.KDTreeSearchParamHybrid(radius=radius_feature, max_nn=30))
     return pcd_down, pcd_fpfh
 
 
@@ -228,11 +239,11 @@ def execute_global_registration(source_down, target_down, source_fpfh,
     return result
 
 def refine_registration(source, target, voxel, init_transform):
-    distance_threshold = voxel * 0.4
+    distance_threshold = voxel * 1
     result = o3d.pipelines.registration.registration_icp(
         source, target, distance_threshold, init_transform,
-        o3d.pipelines.registration.TransformationEstimationPointToPlane(),
-    criteria=o3d.pipelines.registration.ICPConvergenceCriteria(relative_fitness=9e-01, relative_rmse=1e-09, max_iteration=300))
+        o3d.pipelines.registration.TransformationEstimationPointToPoint(),
+    criteria=o3d.pipelines.registration.ICPConvergenceCriteria(relative_fitness=9e-01, relative_rmse=1e-09, max_iteration=100))
     return result
 
 
@@ -243,3 +254,25 @@ def draw_registration_result(source, target, transformation):
     target_temp.paint_uniform_color([0, 0.651, 0.929])
     source_temp.transform(transformation)
     o3d.visualization.draw_geometries([source_temp, target_temp])
+
+def compare_bboxes(source, target):
+    src_box = list(source.get_oriented_bounding_box().extent)
+    target_box = list(target.get_oriented_bounding_box().extent)
+    src0 = src_box[0]
+    src1 = src_box[1]
+    src2 = src_box[2]
+    trg0 = min(target_box, key=lambda x: abs(x - src0))
+    target_box.pop(target_box.index(trg0))
+    trg1 = min(target_box, key=lambda x: abs(x - src1))
+    target_box.pop(target_box.index(trg1))
+    trg2 = min(target_box, key=lambda x: abs(x - src2))
+    target_box.pop(target_box.index(trg2))
+    if abs(src0-trg0) > 0.05 or abs(src1-trg1) > 0.05 or abs(src2-trg2) > 0.05 or number_at_least_x_times_bigger(src1, src1, 2.5) or number_at_least_x_times_bigger(src0, src0, 2.5) or number_at_least_x_times_bigger(src2, src2, 2.5):
+        return False
+    return True ## bboxes similar
+
+def number_at_least_x_times_bigger(x1, x2, x):
+    if x1 > x2:
+        return True if x2*x < x1 else False
+    else:
+        return True if x1*x < x2 else False
