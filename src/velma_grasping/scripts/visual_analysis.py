@@ -149,12 +149,13 @@ def classify(cluster, db):
     scores = []
     transforms = []
     names = []
-    cluster.points = o3d.utility.Vector3dVector(np.asarray(cluster.points) - cluster.get_center())
-    o3d.visualization.draw_geometries([cluster])
+    #cluster.points = o3d.utility.Vector3dVector(np.asarray(cluster.points) - cluster.get_center())
+    #o3d.visualization.draw_geometries([cluster])
     for i, (key, value) in enumerate(zip(keys, values)):
         voxel_size = 0.004
         object_pc = value.pc
         source, target, source_down, target_down, source_fpfh, target_fpfh = prepare_dataset(voxel_size, object_pc, cluster)
+        o3d.visualization.draw_geometries([object_pc, cluster])
         if not compare_bboxes(source, target): #boxes not similar:
             transforms.append(None)
             scores.append(0)
