@@ -1,0 +1,16 @@
+Cola
+GlassWine
+Mug
+Pen1
+Pen2
+BoxLong
+BoxSquare
+Rubber
+
+0
+1
+2
+3
+4
+5
+6

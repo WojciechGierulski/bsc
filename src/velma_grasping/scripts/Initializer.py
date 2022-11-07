@@ -18,7 +18,6 @@ class Initializer:
         if not velma.waitForInit(timeout_s=10.0):
             exitError(1)
 
-
         if velma.enableMotors() != 0:
             exitError(14)
 
@@ -71,28 +70,4 @@ class Initializer:
     @staticmethod
     def get_solver():
         return KinematicsSolverVelma()
-
-    @staticmethod
-    def _load_init_pos(rt_path):
-        with open(rt_path+"/config/init_pose.json", "r") as file:
-            pose = json.load(file)
-            return  pose
-
-    @staticmethod
-    def move_to_init_pose(velma, rt_path):
-        pose = dict(Initializer._load_init_pos(rt_path))
-        velma.moveJoint(pose, 5.0)
-        error = velma.waitForJoint()
-        if error != 0:
-            print error
-            sys.exit()
-        rospy.sleep(0.1)
-
-        q_dest = (pose["head_pan_joint"], pose["head_tilt_joint"])
-        velma.moveHead(q_dest, 2.0, start_time=0.1)
-        error = velma.waitForHead()
-        if error != 0:
-            print error
-            sys.exit()
-        rospy.sleep(0.1)
 

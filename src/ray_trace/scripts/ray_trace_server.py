@@ -14,6 +14,7 @@ from tf_getter import TfGetter
 from ray_trace.srv import ray_trace, ray_traceResponse
 from geometry_msgs.msg import Transform
 from std_msgs.msg import Int16
+from velma_grasping.srv import classify
 
 
 def load_params(rt_path):

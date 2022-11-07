@@ -1,10 +1,12 @@
 <?xml version="1.0"?>
 <launch>
 
+  <env name='GAZEBO_MODEL_PATH' value='$(find velma_grasping)/models'/>
+
   <arg name="use_kinect" default="true" />
   <arg name="use_stereo_pair" default="false" />
   <arg name="world_name" default="$(find velma_grasping)/worlds/test_world1.world" />
-  <arg name="GAZEBO_MODEL_PATH" default="" />
+  <arg name="GAZEBO_MODEL_PATH" default="$(find velma_grasping)/models"/>
   <arg name="GAZEBO_RESOURCE_PATH" default="" />
   <arg name="profile" default="dart_2ms" />
 
@@ -41,8 +43,8 @@
     <arg name="use_kinect" value="$(arg use_kinect)" />
     <arg name="use_stereo_pair" value="$(arg use_stereo_pair)" />
     <arg name="gui" value="$(arg gui)" />
-    <arg name="GAZEBO_MODEL_PATH" value="$(arg GAZEBO_MODEL_PATH):$(find velma_grasping)/data/gazebo/models" />
-    <arg name="GAZEBO_RESOURCE_PATH" value="$(arg GAZEBO_RESOURCE_PATH):$(find velma_grasping)/data/gazebo" />
+    <arg name="GAZEBO_MODEL_PATH" value="$(arg GAZEBO_MODEL_PATH):$(find velma_grasping)/models" />
+    <arg name="GAZEBO_RESOURCE_PATH" value="$(arg GAZEBO_RESOURCE_PATH):$(find velma_grasping)/data/gazebo/models" />
     <arg name="profile" value="$(arg profile)" />
     <arg name="state_snapshot" value="$(arg state_snapshot)" />
     <arg name="spawn_velma" value="$(arg spawn_velma)" />
@@ -98,8 +100,16 @@
     <arg name='frame_id' value='BoxLong' />
   </include>
 
+  <node name="rviz_velma" pkg="rcprg_ros_utils" type="run_rviz.sh" />
+
+  <include file='$(find velma_ros_plugin)/launch/velma_planner.launch'>
+  </include>
+
+  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_client.launch'>
+  </include>
+
   <include file='$(find velma_common)/launch/octomap_offline_server.launch'>
-    <arg name='octomap_file' value='$(find velma_grasping)/worlds/test_world1.bt' />
+    <arg name='octomap_file' value='$(find velma_grasping)/worlds/test_world1_map.bt' />
   </include>
 
 </launch>

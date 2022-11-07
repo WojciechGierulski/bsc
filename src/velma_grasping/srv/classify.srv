@@ -1,0 +1,7 @@
+std_msgs/Float32[] world_to_cam_transform
+std_msgs/Float32[] calib_transform
+sensor_msgs/PointCloud2 pc
+---
+std_msgs/String[] classes
+std_msgs/Float32 scores
+geometry_msgs/Pose[] poses

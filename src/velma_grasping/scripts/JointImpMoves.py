@@ -1,12 +1,11 @@
-from rcprg_ros_utils import exitError
 from velma_common import *
 from rcprg_planner import *
-from velma_kinematics.velma_ik_geom import KinematicsSolverVelma
 from rcprg_ros_utils import exitError
 import rospy
 import math
 import numpy as np
-from geometry_msgs.msg import PoseArray, Pose
+import json
+import sys
 
 class JointImpMoves:
 
@@ -27,7 +26,7 @@ class JointImpMoves:
 
     @staticmethod
     def move_with_planning(velma, qs, planner, collision_object=None):
-        qs = [qMapToConstraints(q, 0.01, group=velma.getJointGroup("impedance_joints")) for q in qs]
+        qs = [qMapToConstraints(q, 0.02, group=velma.getJointGroup("impedance_joints")) for q in qs]
         for i in range(15):
             rospy.sleep(0.1)
             js = velma.getLastJointState()
@@ -91,9 +90,33 @@ class JointImpMoves:
         return q_map_goal
 
     @staticmethod
-    def move_to_init_pos(velma, planner):
+    def move_to_init_pos(velma):
         q = {'torso_0_joint':0, 'right_arm_0_joint':-0.3, 'right_arm_1_joint':-1.8,
             'right_arm_2_joint':1.25, 'right_arm_3_joint':0.85, 'right_arm_4_joint':0, 'right_arm_5_joint':-0.5,
             'right_arm_6_joint':0, 'left_arm_0_joint':0.3, 'left_arm_1_joint':1.8, 'left_arm_2_joint':-1.25,
             'left_arm_3_joint':-0.85, 'left_arm_4_joint':0, 'left_arm_5_joint':0.5, 'left_arm_6_joint':0 }
-        JointImpMoves.move_with_planning(velma, [q], planner)
+        velma.moveJoint(q, 4.0)
+        error = velma.waitForJoint()
+        if error != 0:
+            print(error)
+            sys.exit()
+        rospy.sleep(0.1)
+
+    @staticmethod
+    def _load_calib_pos(rt_path, calib_pose_nr):
+        with open(rt_path+"/config/init_pose_"+str(calib_pose_nr)+".json", "r") as file:
+            pose = json.load(file)
+            return pose
+
+    @staticmethod
+    def move_to_calib_pose(velma, planner, rt_path, calib_pose_nr):
+        pose = dict(JointImpMoves._load_calib_pos(rt_path, calib_pose_nr))
+        JointImpMoves.move_with_planning(velma, [pose], planner)
+
+        q_dest = (0, 0.72)
+        velma.moveHead(q_dest, 2.0, start_time=0.1)
+        error = velma.waitForHead()
+        if error != 0:
+            print(error)
+            sys.exit()
+        rospy.sleep(0.1)

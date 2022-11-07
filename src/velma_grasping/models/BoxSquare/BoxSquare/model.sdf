@@ -23,7 +23,7 @@
         <pose frame=''>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/home/wgieruls/Desktop/bsc/src/velma_grasping/models/Box2/untitled.dae</uri>
+            <uri>model://BoxSquare/BoxSquare.dae</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>

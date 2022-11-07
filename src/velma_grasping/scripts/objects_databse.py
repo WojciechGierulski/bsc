@@ -1,11 +1,16 @@
+#!/usr/bin/env python3
+
 import open3d as o3d
 import sys
 import os
+import rospkg
+
+rospack = rospkg.RosPack()
 
 class Object:
     def __init__(self, name):
         self.name = name
-        path = f"../models/{name}/{name}.stl"
+        path = f"{rospack.get_path('velma_grasping')}/models/{name}/{name}.stl"
         mesh = o3d.io.read_triangle_mesh(path)
         pc = self.preprocess(mesh)
         self.pc = pc
@@ -22,7 +27,7 @@ class DataBase():
         self.module = sys.modules[__name__]
 
     def load_db(self):
-        with open("../database/objects.txt", "r") as file:
+        with open(f"{rospack.get_path('velma_grasping')}/database/objects.txt", "r") as file:
             objects_names = file.read().splitlines()
         for name in objects_names:
             if hasattr(self.module, name):

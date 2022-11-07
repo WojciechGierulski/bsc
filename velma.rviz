@@ -56,18 +56,340 @@ Visualization Manager:
     - Alpha: 1
       Class: rviz/RobotModel
       Collision Enabled: false
-      Enabled: false
+      Enabled: true
       Links:
         All Links Enabled: true
         Expand Joint Details: false
         Expand Link Details: false
         Expand Tree: false
         Link Tree Style: Links in Alphabetic Order
+        calib_left_arm_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        calib_right_arm_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        head_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        head_kinect_rgb_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        head_kinect_rgb_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        head_pan_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        head_pan_motor:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        head_tilt_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        head_tilt_link_dummy:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_FtSensorLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_HandFingerOneKnuckleOneLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_HandFingerOneKnuckleThreeLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_HandFingerOneKnuckleTwoLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_HandFingerThreeKnuckleThreeLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_HandFingerThreeKnuckleTwoLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_HandFingerTwoKnuckleOneLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_HandFingerTwoKnuckleThreeLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_HandFingerTwoKnuckleTwoLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_HandGripLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_HandPalmLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_HandPalmMarkerALink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_HandPalmMarkerBLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_HandPalmMarkerCLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_HandPalmMarkerDLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_arm_1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_arm_2_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_arm_3_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_arm_4_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_arm_5_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_arm_6_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_arm_7_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_arm_ee_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_gripper_mount_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        left_keepUprightLink1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_keepUprightLink2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        left_needle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_FtSensorLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_HandFingerOneKnuckleOneLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_HandFingerOneKnuckleThreeLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_HandFingerOneKnuckleTwoLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_HandFingerThreeKnuckleThreeLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_HandFingerThreeKnuckleTwoLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_HandFingerTwoKnuckleOneLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_HandFingerTwoKnuckleThreeLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_HandFingerTwoKnuckleTwoLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_HandGripLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_HandPalmLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_HandPalmMarkerALink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_HandPalmMarkerBLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_HandPalmMarkerCLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_HandPalmMarkerDLink:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_arm_1_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_arm_2_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_arm_3_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_arm_4_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_arm_5_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_arm_6_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_arm_7_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_arm_ee_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_gripper_mount_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        right_keepUprightLink1:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_keepUprightLink2:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        right_needle_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        stereo_left_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        stereo_left_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        stereo_right_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        stereo_right_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        torso_base:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        torso_link0:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        world:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
       Name: RobotModel
       Robot Description: robot_description
       TF Prefix: ""
       Update Interval: 0
-      Value: false
+      Value: true
       Visual Enabled: true
     - Class: rviz/MarkerArray
       Enabled: false
@@ -205,21 +527,21 @@ Visualization Manager:
       Reference Frame: Rubber
       Value: false
     - Class: rviz/MarkerArray
-      Enabled: false
+      Enabled: true
       Marker Topic: /merged_cells_vis_array
       Name: MarkerArray
       Namespaces:
         {}
       Queue Size: 100
-      Value: false
+      Value: true
     - Class: rviz/MarkerArray
-      Enabled: false
+      Enabled: true
       Marker Topic: /reachability_range
       Name: MarkerArray
       Namespaces:
         {}
       Queue Size: 100
-      Value: false
+      Value: true
     - Class: rviz/Image
       Enabled: true
       Image Topic: /head_stereo_left/image_raw
@@ -295,25 +617,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 3.3761367797851562
+      Distance: 4.743228912353516
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.5847301483154297
-        Y: -0.17303860187530518
-        Z: 1.3676486015319824
+        X: 1.1237409114837646
+        Y: -0.7243990302085876
+        Z: 1.5283312797546387
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 1.1447970867156982
+      Pitch: 1.0247972011566162
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 3.126627206802368
+      Yaw: 0.34662139415740967
     Saved: ~
 Window Geometry:
   Displays:

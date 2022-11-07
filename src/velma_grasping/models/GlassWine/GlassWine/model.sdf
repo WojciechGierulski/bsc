@@ -23,7 +23,7 @@
         <pose frame=''>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/home/wgieruls/Desktop/bsc/src/velma_grasping/models/WineGlass/Glass BLEND.dae</uri>
+            <uri>model://GlassWine/GlassWine.dae</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>

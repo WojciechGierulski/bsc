@@ -23,7 +23,7 @@
         <pose frame=''>0 0 0 0 -0 0</pose>
         <geometry>
           <mesh>
-            <uri>/home/wgieruls/Desktop/bsc/src/velma_grasping/models/Pen1/office pack 1.dae</uri>
+            <uri>model://Pen1/Pen1.dae</uri>
             <scale>1 1 1</scale>
           </mesh>
         </geometry>
