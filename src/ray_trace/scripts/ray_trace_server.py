@@ -125,7 +125,7 @@ def merge_meshes(meshes):
 
 
 def callback_t(data):
-    print ros_numpy.numpify(data)
+    print(ros_numpy.numpify(data))
 
 def tf_matrix_to_tf_msg(matrix):
     tf = Transform()

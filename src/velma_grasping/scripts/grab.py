@@ -14,7 +14,7 @@ from rcprg_ros_utils import exitError
 from Initializer import Initializer
 from sensor_msgs.msg import PointCloud2
 from ray_trace.srv import ray_trace
-from tf_maths import tf_msg_to_matrix
+from tf_maths import tf_msg_to_matrix, frame_to_tf_matrix
 from std_msgs.msg import Bool
 from Initializer import Initializer
 from GripperMoves import GripperMoves
@@ -25,15 +25,23 @@ import tf
 import numpy as np
 from velma_grasping.srv import classify
 from std_msgs.msg import Float32
+from Publishers import publish_detected_object_tf
 
-def list2Float32List(list):
+
+def ListToTypeList(list, type):
     new_list = []
-    for i in list:
-        a = Float32()
-        a.data = i
-        new_list.append(a)
+    for el in list:
+        el2 = type()
+        el2.data = el
+        new_list.append(el2)
     return new_list
 
+def TypeListToList(list):
+    return [el.data for el in list]
+
+
+def LongTransformationListToNumpy(list):
+    return [np.array(el.data).reshape((4, 4)) for el in list]
 
 def load_params(rospack):
     path = rospack.get_path("velma_grasping")
@@ -58,32 +66,17 @@ def get_tf_matrix(publish=False):
         print("Service call failed: %s"%e)
         sys.exit()
 
-def frame_to_tf_matrix(frame):
-    matrix = np.zeros((4, 4))
-    matrix[0, 0] = frame.M[0, 0]
-    matrix[1, 0] = frame.M[1, 0]
-    matrix[0, 1] = frame.M[0, 1]
-    matrix[1, 1] = frame.M[1, 1]
-    matrix[2, 0] = frame.M[2, 0]
-    matrix[2, 1] = frame.M[2, 1]
-    matrix[2, 2] = frame.M[2, 2]
-    matrix[0, 2] = frame.M[0, 2]
-    matrix[1, 2] = frame.M[1, 2]
-    matrix[0, 3] = frame.p.x()
-    matrix[1, 3] = frame.p.y()
-    matrix[2, 3] = frame.p.z()
-    matrix[3, 3] = 1
-    return matrix
 
-
-def send_classification_request(world_to_cam_transform, calib_tf, pc):
+def send_classification_request(world_to_cam_transform, pc, calib_tf=None):
+    if calib_tf == None:
+        calib_tf = np.array([1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]).reshape((4,4))
     rospy.wait_for_service('classify')
     try:
         srv = rospy.ServiceProxy('classify', classify)
-        world_to_cam_transform_ros = list2Float32List(world_to_cam_transform.flatten().tolist())
-        calib_tf_ros = list2Float32List(calib_tf.flatten().tolist())
+        world_to_cam_transform_ros = ListToTypeList(world_to_cam_transform.flatten().tolist(), Float32)
+        calib_tf_ros = ListToTypeList(calib_tf.flatten().tolist(), Float32)
         resp = srv(world_to_cam_transform_ros, calib_tf_ros, pc)
-        print(resp)
+        return TypeListToList(resp.classes), TypeListToList(resp.scores), LongTransformationListToNumpy(resp.transformations)
     except rospy.ServiceException as e:
         print("Service call failed: %s"%e)
         sys.exit()
@@ -120,25 +113,32 @@ if __name__ == "__main__":
     octomap = Initializer.get_octomap()
     Initializer.process_octomap(planner, octomap)
 
-    print("Moving to calib pose")
-    JointImpMoves.move_to_calib_pose(velma, planner, rt_path, 1)
-    GripperMoves.open_grippers(velma, 'right')
+    #print("Moving to calib pose")
+    #JointImpMoves.move_to_calib_pose(velma, planner, rt_path, 1)
+    #GripperMoves.open_grippers(velma, 'right')
 
-    print("Getting calibration transform")
-    calib_tf = get_tf_matrix(True)
-    print(calib_tf)
+    #print("Getting calibration transform")
+    #calib_tf = get_tf_matrix(True)
+    #print(calib_tf)
 
     # Move back to init pose
-    print("Moving back to init pos")
-    GripperMoves.close_grippers(velma, 'right')
-    JointImpMoves.move_to_init_pos(velma)
+    #print("Moving back to init pos")
+    #GripperMoves.close_grippers(velma, 'right')
+    #JointImpMoves.move_head((0, 0), velma)
+    #JointImpMoves.move_to_init_pos(velma)
+
+    JointImpMoves.move_head((0, 0.72), velma)
 
     # Get pc
+    print("Requesting classification")
     point_cloud = rospy.wait_for_message(PARAMS["pc_topic"], PointCloud2, timeout=None)
     world_to_cam_transform = frame_to_tf_matrix(get_tf(PARAMS["world_frame"], PARAMS["camera_frame"]))
-    send_classification_request(world_to_cam_transform, calib_tf, point_cloud)
-
-
-
-
-
+    classes, scores, transformations = send_classification_request(world_to_cam_transform, point_cloud)
+    print(transformations[0])
+    transformations = [np.linalg.inv(transform) for transform in transformations]
+    print(transformations[0])
+    print(classes)
+    print(scores)
+    print(transformations)
+    rospy.Timer(rospy.Duration(1), lambda x: publish_detected_object_tf(transformations, classes))
+    rospy.spin()

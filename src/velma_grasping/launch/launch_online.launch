@@ -58,46 +58,6 @@
     <arg name='frame_id' value='table'/>
   </include>
 
-  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
-    <arg name='link_name' value='Pen2::link_0'/>
-    <arg name='frame_id' value='Pen2' />
-  </include>
-
-  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
-    <arg name='link_name' value='Pen1::link_1'/>
-    <arg name='frame_id' value='Pen1' />
-  </include>
-
-  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
-    <arg name='link_name' value='BoxSquare::link_0'/>
-    <arg name='frame_id' value='BoxSquare' />
-  </include>
-
-  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
-    <arg name='link_name' value='Cola::link_2'/>
-    <arg name='frame_id' value='Cola' />
-  </include>
-
-  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
-    <arg name='link_name' value='Rubber::link_3'/>
-    <arg name='frame_id' value='Rubber' />
-  </include>
-
-  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
-    <arg name='link_name' value='Mug::link_0'/>
-    <arg name='frame_id' value='Mug' />
-  </include>
-
-  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
-    <arg name='link_name' value='GlassWine::link_3'/>
-    <arg name='frame_id' value='GlassWine' />
-  </include>
-
-  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
-    <arg name='link_name' value='BoxLong::link_1'/>
-    <arg name='frame_id' value='BoxLong' />
-  </include>
-
   <node name="rviz_velma" pkg="rcprg_ros_utils" type="run_rviz.sh" />
 
   <include file='$(find velma_ros_plugin)/launch/velma_planner.launch'>

@@ -70,7 +70,7 @@ def remove_points_below_plane(pc, plane, offset):
 def get_table_bbox(inliers, plane, ROIheight, offset):
     # DBScan elements above table in order to find max cluster which is table plane
     inliers = inliers.voxel_down_sample(voxel_size=0.015)
-    labels = np.array(inliers.cluster_dbscan(eps=0.1, min_points=100, print_progress=True))
+    labels = np.array(inliers.cluster_dbscan(eps=0.20, min_points=100, print_progress=True))
     max_label = labels.max()
     colors = plt.get_cmap("tab20")(labels / (max_label if max_label > 0 else 1))
     colors[labels < 0] = 0
@@ -84,19 +84,17 @@ def get_table_bbox(inliers, plane, ROIheight, offset):
         if counts[0][0] == -1:
             return None
         elif counts[0][0] != -1:
-            return counts[0][0]
+            max_class = counts[0][0]
     elif len(counts) >= 2:
         if counts[0][0] == -1:
             max_class = counts[1][0]
-        elif counts[0][0] != 1:
+        elif counts[0][0] != -1:
             max_class = counts[0][0]
-
 
     # remove points not in main cluster
     good_map = (labels == max_class)
     inliers.points = o3d.utility.Vector3dVector(np.array(inliers.points)[good_map])
     inliers.colors = o3d.utility.Vector3dVector(np.array(inliers.colors)[good_map])
-
     # Create bounding box above table plane
     plane_normal = np.array([plane[0], plane[1], abs(plane[2])]) # normal vector to plane pointing up
     plane_normal = plane_normal / np.sqrt(np.sum(plane_normal**2)) # normalize vector
@@ -119,14 +117,18 @@ def get_table_bbox(inliers, plane, ROIheight, offset):
 
 def process_kinect_data(data, tf, tf_calib=None, offset=0.01, ROIheight = 0.5):
     pts, rgb = convert_to_numpy_pts_rgb(data)
+    if len(pts) == 0:
+        return []
     pc = convert_to_o3d(pts, rgb)
     pc = transform_to_world_frame(pc, tf)
-    if tf_calib is not None:
-        pc = pc.transform(tf_calib)
+    #if tf_calib is not None:
+    #    pc = pc.transform(tf_calib)
     plane, inliers = segment_plane(pc)
     inliers = pc.select_by_index(inliers)
     pc = remove_points_below_plane(pc, plane, offset)
     ROIbox = get_table_bbox(inliers, plane, ROIheight, offset)
+    if ROIbox is None:
+        return []
     pc = pc.crop(ROIbox)
     pc_new, ind = pc.remove_radius_outlier(nb_points=15, radius=0.01)
     labels = np.array(pc_new.cluster_dbscan(eps=0.03, min_points=40, print_progress=True))
@@ -155,24 +157,19 @@ def classify_pc(cluster, db):
     for i, (key, value) in enumerate(zip(keys, values)):
         voxel_size = 0.004
         object_pc = value.pc
-        source, target, source_down, target_down, source_fpfh, target_fpfh = prepare_dataset(voxel_size, object_pc, cluster)
-        #o3d.visualization.draw_geometries([object_pc, cluster])
+        source, target, source_down, target_down, source_fpfh, target_fpfh = prepare_dataset(voxel_size, cluster, object_pc)
+        #o3d.visualization.draw_geometries([object_pc, cluster, o3d.geometry.TriangleMesh.create_coordinate_frame(0.1)])
         if not compare_bboxes(source, target): #boxes not similar:
-            transforms.append(None)
-            scores.append(0)
-            names.append(None)
             continue
         start = time.time()
         result_global = execute_global_registration(source_down, target_down, source_fpfh, target_fpfh, voxel_size)
         print(result_global)
         print("Global: "+ str((time.time()-start)) )
         #draw_registration_result(source_down, target_down, result_global.transformation)
-        if result_global.fitness < 0.01:
-            transforms.append(None)
-            scores.append(0)
-            names.append(None)
+        if result_global.fitness < 0.1:
             continue
         else:
+            o3d.visualization.draw_geometries([object_pc, cluster, o3d.geometry.TriangleMesh.create_coordinate_frame(0.1)])
             start = time.time()
             result_local = refine_registration(source, target, voxel_size, result_global.transformation)
             print("Local: " + str(time.time()-start))
@@ -181,10 +178,16 @@ def classify_pc(cluster, db):
             names.append(value.name)
             print(result_local)
             draw_registration_result(source, target, result_local.transformation)
-    max_fitness = max(scores)
-    i = scores.index(max_fitness)
-    transform = transforms[i]
-    name = names[i]
+    transform = None
+    max_fitness = None
+    name = None
+    try:
+        max_fitness = max(scores)
+        i = scores.index(max_fitness)
+        transform = transforms[i]
+        name = names[i]
+    except ValueError:
+        pass
     return transform, max_fitness, name
 
 
@@ -192,9 +195,9 @@ def preprocess_point_cloud(pcd, voxel_size):
     pcd_down = pcd.voxel_down_sample(voxel_size)
     radius_normal = voxel_size * 3
     pcd.estimate_normals(
-        o3d.geometry.KDTreeSearchParamHybrid(radius=radius_normal, max_nn=20))
+        o3d.geometry.KDTreeSearchParamHybrid(radius=radius_normal, max_nn=15))
     pcd_down.estimate_normals(
-        o3d.geometry.KDTreeSearchParamHybrid(radius=radius_normal, max_nn=20))
+        o3d.geometry.KDTreeSearchParamHybrid(radius=radius_normal, max_nn=15))
     pcd.orient_normals_to_align_with_direction(
         orientation_reference=np.array([0., 0., 1.])
     )
@@ -205,7 +208,7 @@ def preprocess_point_cloud(pcd, voxel_size):
     radius_feature = voxel_size * 5
     pcd_fpfh = o3d.pipelines.registration.compute_fpfh_feature(
         pcd_down,
-        o3d.geometry.KDTreeSearchParamHybrid(radius=radius_feature, max_nn=30))
+        o3d.geometry.KDTreeSearchParamHybrid(radius=radius_feature, max_nn=20))
     return pcd_down, pcd_fpfh
 
 
@@ -234,10 +237,10 @@ def execute_global_registration(source_down, target_down, source_fpfh,
         o3d.pipelines.registration.TransformationEstimationPointToPoint(False),
         3, [
             o3d.pipelines.registration.CorrespondenceCheckerBasedOnEdgeLength(
-                0.9),
+                0.95),
             o3d.pipelines.registration.CorrespondenceCheckerBasedOnDistance(
                 distance_threshold)
-        ], o3d.pipelines.registration.RANSACConvergenceCriteria(100000, 0.999))
+        ], o3d.pipelines.registration.RANSACConvergenceCriteria(300000, 0.999))
     return result
 
 def refine_registration(source, target, voxel, init_transform):
@@ -250,12 +253,13 @@ def refine_registration(source, target, voxel, init_transform):
 
 
 def draw_registration_result(source, target, transformation):
+    print(transformation)
     source_temp = copy.deepcopy(source)
     target_temp = copy.deepcopy(target)
     source_temp.paint_uniform_color([1, 0.706, 0])
     target_temp.paint_uniform_color([0, 0.651, 0.929])
     source_temp.transform(transformation)
-    o3d.visualization.draw_geometries([source_temp, target_temp])
+    o3d.visualization.draw_geometries([source_temp, target_temp, o3d.geometry.TriangleMesh.create_coordinate_frame(0.1)])
 
 def compare_bboxes(source, target):
     src_box = list(source.get_oriented_bounding_box().extent)
@@ -271,7 +275,7 @@ def compare_bboxes(source, target):
     trg0 = trg[0]
     trg1 = trg[1]
     trg2 = trg[2]
-    if abs(src0-trg0) > 0.05 or abs(src1-trg1) > 0.05 or abs(src2-trg2) > 0.05 or number_at_least_x_times_bigger(src1, src1, 2.5) or number_at_least_x_times_bigger(src0, src0, 2.5) or number_at_least_x_times_bigger(src2, src2, 2.5):
+    if abs(src0-trg0) > 0.05 or abs(src1-trg1) > 0.05 or abs(src2-trg2) > 0.05 or number_at_least_x_times_bigger(src1, src1, 1.5) or number_at_least_x_times_bigger(src0, src0, 1.5) or number_at_least_x_times_bigger(src2, src2, 1.5):
         return False
     return True ## bboxes similar
 

@@ -120,3 +120,12 @@ class JointImpMoves:
             print(error)
             sys.exit()
         rospy.sleep(0.1)
+
+    @staticmethod
+    def move_head(q_dest, velma):
+        velma.moveHead(q_dest, 2.0, start_time=0.1)
+        error = velma.waitForHead()
+        if error != 0:
+            print(error)
+            sys.exit()
+        rospy.sleep(0.1)

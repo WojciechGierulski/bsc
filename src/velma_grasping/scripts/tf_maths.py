@@ -18,3 +18,20 @@ def tf_msg_to_matrix(tf):
     matrix[2, 3] = tf.translation.z
     matrix[3, 3] = 1
     return matrix
+
+def frame_to_tf_matrix(frame):
+    matrix = np.zeros((4, 4))
+    matrix[0, 0] = frame.M[0, 0]
+    matrix[1, 0] = frame.M[1, 0]
+    matrix[0, 1] = frame.M[0, 1]
+    matrix[1, 1] = frame.M[1, 1]
+    matrix[2, 0] = frame.M[2, 0]
+    matrix[2, 1] = frame.M[2, 1]
+    matrix[2, 2] = frame.M[2, 2]
+    matrix[0, 2] = frame.M[0, 2]
+    matrix[1, 2] = frame.M[1, 2]
+    matrix[0, 3] = frame.p.x()
+    matrix[1, 3] = frame.p.y()
+    matrix[2, 3] = frame.p.z()
+    matrix[3, 3] = 1
+    return matrix
