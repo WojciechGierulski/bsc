@@ -41,3 +41,21 @@ class GripperMoves:
             velma.moveHandLeft(q, [1, 1, 1, 1], [9999, 9999, 9999, 9999], 9999, hold=False)
             if velma.waitForHandLeft() != 0:
                 exitError(2)
+
+    @staticmethod
+    def move_grippers(velma, which, q):
+        if which == 'both':
+            velma.moveHandLeft(q, [1, 1, 1, 1], [9999, 9999, 9999, 9999], 9999, hold=False)
+            velma.moveHandRight(q, [1, 1, 1, 1], [9999,9999,9999,9999], 9999, hold=False)
+            if velma.waitForHandLeft() != 0:
+                exitError(2)
+            if velma.waitForHandRight() != 0:
+                exitError(4)
+        if which == 'right':
+            velma.moveHandRight(q, [1, 1, 1, 1], [9999,9999,9999,9999], 9999, hold=False)
+            if velma.waitForHandRight() != 0:
+                exitError(4)
+        if which == 'left':
+            velma.moveHandLeft(q, [1, 1, 1, 1], [9999, 9999, 9999, 9999], 9999, hold=False)
+            if velma.waitForHandLeft() != 0:
+                exitError(2)

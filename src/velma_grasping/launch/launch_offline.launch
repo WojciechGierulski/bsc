@@ -5,7 +5,7 @@
 
   <arg name="use_kinect" default="true" />
   <arg name="use_stereo_pair" default="false" />
-  <arg name="world_name" default="$(find velma_grasping)/worlds/test_world1.world" />
+  <arg name="world_name" default="$(find velma_grasping)/worlds/test_world2.world" />
   <arg name="GAZEBO_MODEL_PATH" default="$(find velma_grasping)/models"/>
   <arg name="GAZEBO_RESOURCE_PATH" default="" />
   <arg name="profile" default="dart_2ms" />
@@ -69,7 +69,7 @@
   </include>
 
   <include file='$(find velma_common)/launch/octomap_offline_server.launch'>
-    <arg name='octomap_file' value='$(find velma_grasping)/worlds/test_world1_map.bt' />
+    <arg name='octomap_file' value='$(find velma_grasping)/worlds/test_world2_map.bt' />
   </include>
 
 </launch>

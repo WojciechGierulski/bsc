@@ -25,7 +25,10 @@ import tf
 import numpy as np
 from velma_grasping.srv import classify
 from std_msgs.msg import Float32
-from Publishers import publish_detected_object_tf
+from Publishers import publish_detected_object_tf, publish_pose_arr
+from grasps import GraspGenerator
+from Functions import check_which_hand
+from sequence_execution import SequenceExecutor
 
 
 def ListToTypeList(list, type):
@@ -101,6 +104,7 @@ if __name__ == "__main__":
     velma = Initializer.initialize_system()
     planner = Initializer.get_planner(velma)
     solver = Initializer.get_solver()
+    print("Closing grippers")
     GripperMoves.close_grippers(velma, 'both')
     rospy.sleep(1)
     JointImpMoves.move_to_init_pos(velma)
@@ -113,32 +117,46 @@ if __name__ == "__main__":
     octomap = Initializer.get_octomap()
     Initializer.process_octomap(planner, octomap)
 
-    #print("Moving to calib pose")
-    #JointImpMoves.move_to_calib_pose(velma, planner, rt_path, 1)
-    #GripperMoves.open_grippers(velma, 'right')
+    """print("Moving to calib pose")
+    JointImpMoves.move_to_calib_pose(velma, planner, rt_path, 1)
+    GripperMoves.open_grippers(velma, 'right')
 
-    #print("Getting calibration transform")
-    #calib_tf = get_tf_matrix(True)
-    #print(calib_tf)
+    print("Getting calibration transform")
+    calib_tf = get_tf_matrix(True)
+    print(calib_tf)
 
     # Move back to init pose
-    #print("Moving back to init pos")
-    #GripperMoves.close_grippers(velma, 'right')
-    #JointImpMoves.move_head((0, 0), velma)
-    #JointImpMoves.move_to_init_pos(velma)
+    print("Moving back to init pos")
+    GripperMoves.close_grippers(velma, 'right')
+    JointImpMoves.move_head((0, 0), velma)
+    JointImpMoves.move_to_init_pos(velma)"""
 
-    JointImpMoves.move_head((0, 0.72), velma)
+    JointImpMoves.move_head((0, 0.85), velma)
 
     # Get pc
     print("Requesting classification")
     point_cloud = rospy.wait_for_message(PARAMS["pc_topic"], PointCloud2, timeout=None)
     world_to_cam_transform = frame_to_tf_matrix(get_tf(PARAMS["world_frame"], PARAMS["camera_frame"]))
     classes, scores, transformations = send_classification_request(world_to_cam_transform, point_cloud)
-    print(transformations[0])
     transformations = [np.linalg.inv(transform) for transform in transformations]
-    print(transformations[0])
     print(classes)
-    print(scores)
-    print(transformations)
     rospy.Timer(rospy.Duration(1), lambda x: publish_detected_object_tf(transformations, classes))
+
+    idx = classes.index(OBJECT_NAME)
+
+    hand = check_which_hand(velma, transformations[idx])
+    #hand = "right"
+
+    GG = GraspGenerator()
+    frames, sequence = GG.grasps[OBJECT_NAME](transformations[idx], hand)
+    publish_pose_arr(frames, "grasps")
+
+
+    frames = JointImpMoves.gripper_to_joint_7_transform(velma, frames, hand)
+    publish_pose_arr(frames, "grasps")
+    iks, torsos = JointImpMoves.get_IK_for_frames(hand, frames, solver)
+    qs = JointImpMoves.transform_iks_and_torsos_to_q(iks, torsos, hand)
+    JointImpMoves.move_with_planning(velma, qs, planner)
+    SequenceExecutor.execute_sequence(sequence, velma, hand, solver)
+
     rospy.spin()

@@ -8,6 +8,7 @@ from rcprg_ros_utils import exitError
 from rcprg_planner import *
 import math
 import json
+from JointImpMoves import JointImpMoves
 
 
 class Initializer:
@@ -35,9 +36,11 @@ class Initializer:
         if velma.enableMotors() != 0:
             exitError(2)
 
+        JointImpMoves.switch_to_jimp(velma)
+
         print("Moving to the current position...")
         js_start = velma.getLastJointState()
-        velma.moveJoint(js_start[1], 0.5, start_time=0.5, position_tol=15.0 / 180.0 * math.pi)
+        velma.moveJoint(js_start[1], 0.5, start_time=0.5, position_tol=180.0 / 180.0 * math.pi)
         error = velma.waitForJoint()
         if error != 0:
             print("The action should have ended without error, but the error code is", error)

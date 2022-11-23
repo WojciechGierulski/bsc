@@ -121,8 +121,8 @@ def process_kinect_data(data, tf, tf_calib=None, offset=0.01, ROIheight = 0.5):
         return []
     pc = convert_to_o3d(pts, rgb)
     pc = transform_to_world_frame(pc, tf)
-    #if tf_calib is not None:
-    #    pc = pc.transform(tf_calib)
+    if tf_calib is not None:
+        pc = pc.transform(tf_calib)
     plane, inliers = segment_plane(pc)
     inliers = pc.select_by_index(inliers)
     pc = remove_points_below_plane(pc, plane, offset)
@@ -131,7 +131,7 @@ def process_kinect_data(data, tf, tf_calib=None, offset=0.01, ROIheight = 0.5):
         return []
     pc = pc.crop(ROIbox)
     pc_new, ind = pc.remove_radius_outlier(nb_points=15, radius=0.01)
-    labels = np.array(pc_new.cluster_dbscan(eps=0.03, min_points=40, print_progress=True))
+    labels = np.array(pc_new.cluster_dbscan(eps=0.1, min_points=35, print_progress=True))
     max_label = labels.max()
     n_clusters = max_label + 1
     clusters = []
@@ -153,7 +153,7 @@ def classify_pc(cluster, db):
     transforms = []
     names = []
     #cluster.points = o3d.utility.Vector3dVector(np.asarray(cluster.points) - cluster.get_center())
-    o3d.visualization.draw_geometries([cluster])
+    #o3d.visualization.draw_geometries([cluster])
     for i, (key, value) in enumerate(zip(keys, values)):
         voxel_size = 0.004
         object_pc = value.pc
@@ -169,7 +169,7 @@ def classify_pc(cluster, db):
         if result_global.fitness < 0.1:
             continue
         else:
-            o3d.visualization.draw_geometries([object_pc, cluster, o3d.geometry.TriangleMesh.create_coordinate_frame(0.1)])
+            #o3d.visualization.draw_geometries([object_pc, cluster, o3d.geometry.TriangleMesh.create_coordinate_frame(0.1)])
             start = time.time()
             result_local = refine_registration(source, target, voxel_size, result_global.transformation)
             print("Local: " + str(time.time()-start))
@@ -240,7 +240,7 @@ def execute_global_registration(source_down, target_down, source_fpfh,
                 0.95),
             o3d.pipelines.registration.CorrespondenceCheckerBasedOnDistance(
                 distance_threshold)
-        ], o3d.pipelines.registration.RANSACConvergenceCriteria(300000, 0.999))
+        ], o3d.pipelines.registration.RANSACConvergenceCriteria(500000, 0.999))
     return result
 
 def refine_registration(source, target, voxel, init_transform):

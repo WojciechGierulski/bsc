@@ -26,20 +26,21 @@ class JointImpMoves:
 
     @staticmethod
     def move_with_planning(velma, qs, planner, collision_object=None):
-        qs = [qMapToConstraints(q, 0.02, group=velma.getJointGroup("impedance_joints")) for q in qs]
-        for i in range(15):
+        qs = [qMapToConstraints(q, 0.01, group=velma.getJointGroup("impedance_joints")) for q in qs]
+        for i in range(10):
             rospy.sleep(0.1)
             js = velma.getLastJointState()
             print("Planning (try", i, ")...")
             if collision_object is not None:
-                traj = planner.plan(js[1], qs, "impedance_joints", num_planning_attempts=10, max_velocity_scaling_factor=0.15, planner_id="RRTConnect",
+                traj = planner.plan(js[1], qs, "impedance_joints", num_planning_attempts=5, max_velocity_scaling_factor=1, planner_id="RRTConnect",
                                     attached_collision_objects=[collision_object])
             elif collision_object is None:
-                traj = planner.plan(js[1], qs, "impedance_joints", num_planning_attempts=10, max_velocity_scaling_factor=0.15, planner_id="RRTConnect")
+                traj = planner.plan(js[1], qs, "impedance_joints", num_planning_attempts=5, max_velocity_scaling_factor=0.03,
+                                    max_acceleration_scaling_factor=0.5, planner_id="RRTConnect")
             if traj == None:
                 continue
             print("Executing trajectory...")
-            if not velma.moveJointTraj(traj, start_time=0.5, position_tol=11.0/180.0 * math.pi, velocity_tol=11.0/180.0*math.pi):
+            if not velma.moveJointTraj(traj, start_time=0.5, position_tol=60/180.0*math.pi, velocity_tol=60/180.0*math.pi):
                 exitError(5)
             if velma.waitForJoint() == 0:
                 return True
@@ -54,13 +55,14 @@ class JointImpMoves:
         # IK - inverse kinematics
         IKs = []
         torsos = []
-        for torso in np.linspace(-1.55, 1.55, 6):
-            for elbow_ang in np.linspace(-1.55, 1.55, 6):
+        for torso in np.linspace(-1.5, 1.5, 10):
+            for elbow_ang in np.linspace(-1.5, 1.5, 20):
                 for frame in frames:
-                    ik = solver.calculateIkArm(hand, frame, torso, elbow_ang, False, False, False)
-                    if None not in ik:
-                        IKs.append(ik)
+                    ik1 = solver.calculateIkArm(hand, frame, torso, elbow_ang, False, False, False)
+                    if None not in ik1:
+                        IKs.append(ik1)
                         torsos.append(torso)
+
         return IKs, torsos
 
     @staticmethod
@@ -129,3 +131,15 @@ class JointImpMoves:
             print(error)
             sys.exit()
         rospy.sleep(0.1)
+
+    @staticmethod
+    def gripper_to_joint_7_transform(velma, frames, hand):
+        # Transform gripper frames to 7th joint frames
+        new_frames = []
+        if hand == 'right':
+            transformation = velma.getTf('Gr', 'Wr')
+        elif hand == 'left':
+            transformation = velma.getTf('Gl', 'Wl')
+        for frame in frames:
+            new_frames.append(frame*transformation)
+        return new_frames
