@@ -189,7 +189,7 @@ def handle_request(req):
     if publish:
         publish_points(cropped_points, "cropped_camera_pc", WORLD_FRAME)
     pc_camera = trimesh.points.PointCloud(cropped_points)
-    matrix, transformed, cost = trimesh.registration.icp(model_pc.vertices, pc_camera.vertices, max_iterations=100, threshold=0.000001)
+    matrix, transformed, cost = trimesh.registration.icp(pc_camera.vertices, model_pc.vertices, max_iterations=100, threshold=0.000001)
     print "Finished processing"
     i = Int16()
     i.data = 0

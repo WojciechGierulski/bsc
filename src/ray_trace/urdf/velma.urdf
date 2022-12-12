@@ -40,33 +40,23 @@
 <xacro:property name="cal_torso_link2_left_arm_base_joint_z" value="1.17335" />
 <xacro:property name="cal_torso_link2_left_arm_base_joint_roll" value="0" />
 -->
-  <material name="bh_DarkGrey">
-    <color rgba="0.3 0.3 0.3 1.0"/>
-  </material>
-  <material name="bh_Red">
-    <color rgba="0.3 0.3 0.3 1.0"/>
-  </material>
-  <material name="bh_Black">
-    <color rgba="0 0 0 1.0"/>
-  </material>
-  <material name="bh_Orange">
-    <color rgba="1.0 0.487 0 1.0"/>
-  </material>
-  <material name="bh_Silver">
-    <color rgba="1.0 1.0 1.0 1.0"/>
-  </material>
-  <material name="bh_Grey">
-    <color rgba="0.7 0.7 0.7 1.0"/>
-  </material>
-  <material name="bh_Blue">
-    <color rgba="0.0 0.0 0.8 1.0"/>
-  </material>
-  <material name="bh_HandGrey">
-    <color rgba="0.953 0.996 0.694 1.0"/>
-  </material>
-  <material name="bh_SickBlue">
-    <color rgba="0.3058 0.5921 0.7294 1.0"/>
-  </material>
+  <!-- example of alternative mount of arms -->
+  <!--
+<xacro:property name="cal_torso_link2_left_arm_base_joint_x" value="-0.0006" />
+<xacro:property name="cal_torso_link2_left_arm_base_joint_y" value="-0.001311324" />
+<xacro:property name="cal_torso_link2_left_arm_base_joint_z" value="1.17335" />
+<xacro:property name="cal_torso_link2_left_arm_base_joint_roll" value="0.0008701342499668567" />
+<xacro:property name="cal_torso_link2_left_arm_base_joint_pitch" value="1.572475048897873576" />
+<xacro:property name="cal_torso_link2_left_arm_base_joint_yaw" value="1.5724254826531625" />
+
+<xacro:property name="cal_torso_link2_right_arm_base_joint_x" value="-0.0004" />
+<xacro:property name="cal_torso_link2_right_arm_base_joint_y" value="-0.000888676" />
+<xacro:property name="cal_torso_link2_right_arm_base_joint_z" value="1.17335" />
+<xacro:property name="cal_torso_link2_right_arm_base_joint_roll" value="-0.0004493549541723" />
+<xacro:property name="cal_torso_link2_right_arm_base_joint_pitch" value="-1.5724747154567336" />
+<xacro:property name="cal_torso_link2_right_arm_base_joint_yaw" value="1.5704709495574307" />
+-->
+  <!--<xacro:include filename="$(find barrett_hand_defs)/defs/materials.xml"/>-->
   <!-- Gazebo Plugin -->
   <gazebo>
     <plugin filename="librtt_gazebo_deployer.so" name="rtt_gazebo">
@@ -237,6 +227,12 @@
         <mesh filename="package://velma_description/meshes/collision/torso0_collision.stl"/>
       </geometry>
     </collision>
+    <collision>
+      <origin rpy="0 0 0" xyz="0.04 0 1.57"/>
+      <geometry>
+        <sphere radius="0.24"/>
+      </geometry>
+    </collision>
     <self_collision_checking>
       <origin rpy="0 0 0" xyz="0 0.0 0.8"/>
       <geometry>
@@ -247,6 +243,12 @@
       <origin rpy="0 0 0" xyz="-0.1 0.0 0.45"/>
       <geometry>
         <capsule length="0.4" radius="0.18"/>
+      </geometry>
+    </self_collision_checking>
+    <self_collision_checking>
+      <origin rpy="0 0 0" xyz="0.04 0 1.57"/>
+      <geometry>
+        <sphere radius="0.24"/>
       </geometry>
     </self_collision_checking>
     <inertial>
@@ -456,16 +458,7 @@
       <geometry name="right_arm_5_geom">
         <mesh filename="package://lwr_defs/meshes/lwr/link_5_simplified.STL"/>
       </geometry>
-      <material name="Green">
-        <color rgba="1 0.5 0 1.0"/>
-      </material>
-    </visual>
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 -0.008"/>
-      <geometry name="right_arm_5_geom">
-        <mesh filename="package://lwr_defs/meshes/lwr/link_5_simplified.STL"/>
-      </geometry>
-      <material name="Blue">
+      <material name="Orange">
         <color rgba="1 0.5 0 1.0"/>
       </material>
     </visual>
@@ -830,16 +823,7 @@
       <geometry name="left_arm_5_geom">
         <mesh filename="package://lwr_defs/meshes/lwr/link_5_simplified.STL"/>
       </geometry>
-      <material name="Green">
-        <color rgba="1 0.5 0 1.0"/>
-      </material>
-    </visual>
-    <visual>
-      <origin rpy="0 0 0" xyz="0 0 -0.008"/>
-      <geometry name="left_arm_5_geom">
-        <mesh filename="package://lwr_defs/meshes/lwr/link_5_simplified.STL"/>
-      </geometry>
-      <material name="Blue">
+      <material name="Orange">
         <color rgba="1 0.5 0 1.0"/>
       </material>
     </visual>
@@ -1019,14 +1003,18 @@
       <geometry>
         <mesh filename="package://velma_description/meshes/gripper_mount_simplified.stl"/>
       </geometry>
-      <material name="Orange"/>
+      <material name="Orange">
+        <color rgba="1 0.5 0 1.0"/>
+      </material>
     </visual>
     <visual>
       <origin rpy="0.0 0 0" xyz="0 0 0"/>
       <geometry>
         <mesh filename="package://velma_description/meshes/imu_case_right.stl"/>
       </geometry>
-      <material name="Orange"/>
+      <material name="Orange">
+        <color rgba="1 0.5 0 1.0"/>
+      </material>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -1034,19 +1022,6 @@
         <mesh filename="package://velma_description/meshes/collision/gripper_mount_collision2.STL"/>
       </geometry>
     </collision>
-    <!-- needle -->
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0.07"/>
-      <geometry>
-        <box size="0.05 0.05 0.14"/>
-      </geometry>
-    </collision>
-    <self_collision_checking>
-      <origin rpy="0 0 0" xyz="0 0 0.07"/>
-      <geometry>
-        <capsule length="0.09" radius="0.025"/>
-      </geometry>
-    </self_collision_checking>
     <self_collision_checking>
       <origin rpy="0 1.57079632679 0" xyz="0.02 0.0 0.01"/>
       <geometry>
@@ -1095,30 +1070,6 @@
       </material>
     </visual>
   </link>
-  <joint name="right_needle_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0.0011 -0.0008 0.1126"/>
-    <parent link="right_arm_ee_link"/>
-    <child link="right_needle_link"/>
-  </joint>
-  <link name="right_needle_link">
-    <inertial>
-      <mass value="0"/>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
-    </inertial>
-  </link>
-  <joint name="left_needle_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="-0.001 0.0008 0.106"/>
-    <parent link="left_arm_ee_link"/>
-    <child link="left_needle_link"/>
-  </joint>
-  <link name="left_needle_link">
-    <inertial>
-      <mass value="0"/>
-      <origin rpy="0 0 0" xyz="0 0 0"/>
-      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0"/>
-    </inertial>
-  </link>
   <!--
 gripper mount link:
 density: 1
@@ -1151,7 +1102,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://velma_description/meshes/gripper_mount_simplified.stl"/>
       </geometry>
-      <material name="Orange"/>
+      <material name="Orange">
+        <color rgba="1 0.5 0 1.0"/>
+      </material>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0"/>
@@ -1159,19 +1112,6 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
         <mesh filename="package://velma_description/meshes/collision/gripper_mount_collision2.STL"/>
       </geometry>
     </collision>
-    <!-- needle -->
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0.07"/>
-      <geometry>
-        <box size="0.05 0.05 0.14"/>
-      </geometry>
-    </collision>
-    <self_collision_checking>
-      <origin rpy="0 0 0" xyz="0 0 0.07"/>
-      <geometry>
-        <capsule length="0.09" radius="0.025"/>
-      </geometry>
-    </self_collision_checking>
     <self_collision_checking>
       <origin rpy="0 1.57079632679 0" xyz="0.02 0.0 -0.01"/>
       <geometry>
@@ -1259,7 +1199,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/palm.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="Blue">
+        <color rgba="0.2 0.2 0.9 1.0"/>
+      </material>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0.029"/>
@@ -1319,6 +1261,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="right_HandPalmLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Blue</material>
   </gazebo>
   <joint name="right_HandPalmMarkerAJoint" type="fixed">
     <parent link="right_HandPalmLink"/>
@@ -1396,7 +1339,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/secondFingerLink.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="LightBlue">
+        <color rgba="0.5 0.5 1.0 1.0"/>
+      </material>
     </visual>
     <inertial>
       <origin xyz="0.031720 0.001070 -0.000586"/>
@@ -1427,6 +1372,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="right_HandFingerThreeKnuckleTwoLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <joint name="right_HandFingerThreeKnuckleTwoJoint" type="revolute">
     <parent link="right_HandPalmLink"/>
@@ -1446,7 +1392,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/thirdFingerLink.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="LightBlue">
+        <color rgba="0.5 0.5 1.0 1.0"/>
+      </material>
     </visual>
     <!--      <inertial>
         <origin xyz="0.01970974 0.00182016 0.00020041" />
@@ -1483,6 +1431,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="right_HandFingerThreeKnuckleThreeLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <joint name="right_HandFingerThreeKnuckleThreeJoint" type="revolute">
     <parent link="right_HandFingerThreeKnuckleTwoLink"/>
@@ -1503,7 +1452,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/firstFingerLink.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="LightBlue">
+        <color rgba="0.5 0.5 1.0 1.0"/>
+      </material>
     </visual>
     <inertial>
       <origin xyz="0.03201666 -0.00086502 0.00890075"/>
@@ -1526,6 +1477,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="right_HandFingerOneKnuckleOneLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <joint name="right_HandFingerOneKnuckleOneJoint" type="revolute">
     <parent link="right_HandPalmLink"/>
@@ -1544,7 +1496,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/secondFingerLink.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="LightBlue">
+        <color rgba="0.5 0.5 1.0 1.0"/>
+      </material>
     </visual>
     <inertial>
       <origin xyz="0.031720 0.001070 -0.000586"/>
@@ -1575,6 +1529,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="right_HandFingerOneKnuckleTwoLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <joint name="right_HandFingerOneKnuckleTwoJoint" type="revolute">
     <parent link="right_HandFingerOneKnuckleOneLink"/>
@@ -1594,7 +1549,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/thirdFingerLink.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="LightBlue">
+        <color rgba="0.5 0.5 1.0 1.0"/>
+      </material>
     </visual>
     <!--      <inertial>
         <origin xyz="0.01970974 0.00182016 0.00020041" />
@@ -1631,6 +1588,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="right_HandFingerOneKnuckleThreeLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <joint name="right_HandFingerOneKnuckleThreeJoint" type="revolute">
     <parent link="right_HandFingerOneKnuckleTwoLink"/>
@@ -1651,7 +1609,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/firstFingerLink.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="LightBlue">
+        <color rgba="0.5 0.5 1.0 1.0"/>
+      </material>
     </visual>
     <inertial>
       <origin xyz="0.03201666 -0.00086502 0.00890075"/>
@@ -1674,6 +1634,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="right_HandFingerTwoKnuckleOneLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <joint name="right_HandFingerTwoKnuckleOneJoint" type="revolute">
     <parent link="right_HandPalmLink"/>
@@ -1692,7 +1653,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/secondFingerLink.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="LightBlue">
+        <color rgba="0.5 0.5 1.0 1.0"/>
+      </material>
     </visual>
     <inertial>
       <origin xyz="0.031720 0.001070 -0.000586"/>
@@ -1723,6 +1686,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="right_HandFingerTwoKnuckleTwoLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <joint name="right_HandFingerTwoKnuckleTwoJoint" type="revolute">
     <parent link="right_HandFingerTwoKnuckleOneLink"/>
@@ -1742,7 +1706,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/thirdFingerLink.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="LightBlue">
+        <color rgba="0.5 0.5 1.0 1.0"/>
+      </material>
     </visual>
     <!--      <inertial>
         <origin xyz="0.01970974 0.00182016 0.00020041" />
@@ -1779,6 +1745,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="right_HandFingerTwoKnuckleThreeLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <joint name="right_HandFingerTwoKnuckleThreeJoint" type="revolute">
     <parent link="right_HandFingerTwoKnuckleTwoLink"/>
@@ -1829,7 +1796,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/palm.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="Blue">
+        <color rgba="0.2 0.2 0.9 1.0"/>
+      </material>
     </visual>
     <collision>
       <origin rpy="0 0 0" xyz="0 0 0.029"/>
@@ -1889,6 +1858,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="left_HandPalmLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Blue</material>
   </gazebo>
   <joint name="left_HandPalmMarkerAJoint" type="fixed">
     <parent link="left_HandPalmLink"/>
@@ -1966,7 +1936,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/secondFingerLink.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="LightBlue">
+        <color rgba="0.5 0.5 1.0 1.0"/>
+      </material>
     </visual>
     <inertial>
       <origin xyz="0.031720 0.001070 -0.000586"/>
@@ -1997,6 +1969,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="left_HandFingerThreeKnuckleTwoLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <joint name="left_HandFingerThreeKnuckleTwoJoint" type="revolute">
     <parent link="left_HandPalmLink"/>
@@ -2016,7 +1989,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/thirdFingerLink.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="LightBlue">
+        <color rgba="0.5 0.5 1.0 1.0"/>
+      </material>
     </visual>
     <!--      <inertial>
         <origin xyz="0.01970974 0.00182016 0.00020041" />
@@ -2053,6 +2028,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="left_HandFingerThreeKnuckleThreeLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <joint name="left_HandFingerThreeKnuckleThreeJoint" type="revolute">
     <parent link="left_HandFingerThreeKnuckleTwoLink"/>
@@ -2073,7 +2049,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/firstFingerLink.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="LightBlue">
+        <color rgba="0.5 0.5 1.0 1.0"/>
+      </material>
     </visual>
     <inertial>
       <origin xyz="0.03201666 -0.00086502 0.00890075"/>
@@ -2096,6 +2074,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="left_HandFingerOneKnuckleOneLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <joint name="left_HandFingerOneKnuckleOneJoint" type="revolute">
     <parent link="left_HandPalmLink"/>
@@ -2114,7 +2093,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/secondFingerLink.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="LightBlue">
+        <color rgba="0.5 0.5 1.0 1.0"/>
+      </material>
     </visual>
     <inertial>
       <origin xyz="0.031720 0.001070 -0.000586"/>
@@ -2145,6 +2126,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="left_HandFingerOneKnuckleTwoLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <joint name="left_HandFingerOneKnuckleTwoJoint" type="revolute">
     <parent link="left_HandFingerOneKnuckleOneLink"/>
@@ -2164,7 +2146,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/thirdFingerLink.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="LightBlue">
+        <color rgba="0.5 0.5 1.0 1.0"/>
+      </material>
     </visual>
     <!--      <inertial>
         <origin xyz="0.01970974 0.00182016 0.00020041" />
@@ -2201,6 +2185,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="left_HandFingerOneKnuckleThreeLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <joint name="left_HandFingerOneKnuckleThreeJoint" type="revolute">
     <parent link="left_HandFingerOneKnuckleTwoLink"/>
@@ -2221,7 +2206,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/firstFingerLink.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="LightBlue">
+        <color rgba="0.5 0.5 1.0 1.0"/>
+      </material>
     </visual>
     <inertial>
       <origin xyz="0.03201666 -0.00086502 0.00890075"/>
@@ -2244,6 +2231,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="left_HandFingerTwoKnuckleOneLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <joint name="left_HandFingerTwoKnuckleOneJoint" type="revolute">
     <parent link="left_HandPalmLink"/>
@@ -2262,7 +2250,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/secondFingerLink.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="LightBlue">
+        <color rgba="0.5 0.5 1.0 1.0"/>
+      </material>
     </visual>
     <inertial>
       <origin xyz="0.031720 0.001070 -0.000586"/>
@@ -2293,6 +2283,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="left_HandFingerTwoKnuckleTwoLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <joint name="left_HandFingerTwoKnuckleTwoJoint" type="revolute">
     <parent link="left_HandFingerTwoKnuckleOneLink"/>
@@ -2312,7 +2303,9 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
       <geometry>
         <mesh filename="package://barrett_hand_defs/meshes/thirdFingerLink.stl"/>
       </geometry>
-      <material name="bh_HandGrey"/>
+      <material name="LightBlue">
+        <color rgba="0.5 0.5 1.0 1.0"/>
+      </material>
     </visual>
     <!--      <inertial>
         <origin xyz="0.01970974 0.00182016 0.00020041" />
@@ -2349,6 +2342,7 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
   <gazebo reference="left_HandFingerTwoKnuckleThreeLink">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
+    <material>Gazebo/Grey</material>
   </gazebo>
   <joint name="left_HandFingerTwoKnuckleThreeJoint" type="revolute">
     <parent link="left_HandFingerTwoKnuckleTwoLink"/>
@@ -2406,18 +2400,20 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
         <color rgba="0.5 0.5 0.5 1"/>
       </material>
     </visual>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0.0308"/>
-      <geometry>
-        <box size="0.14 0.09 0.06"/>
-      </geometry>
-    </collision>
-    <self_collision_checking>
-      <origin rpy="0 0 0" xyz="0.0 0 0.04"/>
-      <geometry>
-        <capsule length="0.08" radius="0.07"/>
-      </geometry>
-    </self_collision_checking>
+    <!--
+      <collision>
+        <origin xyz="0 0 0.0308" rpy="0 0 0" />
+        <geometry>
+          <box size="0.14 0.09 0.06" />
+        </geometry>
+      </collision>
+      <self_collision_checking>
+        <origin xyz="0.0 0 0.04" rpy="0 0 0"/>
+        <geometry>
+          <capsule radius="0.07" length="0.08"/>
+        </geometry>
+      </self_collision_checking>
+-->
     <inertial>
       <mass value="0.2"/>
       <origin rpy="0 0 0" xyz="0 0 0.0625"/>
@@ -2443,12 +2439,14 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
         <color rgba="0.5 0.5 0.5 1"/>
       </material>
     </visual>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 -0.00921 0.04463"/>
-      <geometry>
-        <box size="0.08 0.08 0.08"/>
-      </geometry>
-    </collision>
+    <!--
+       <collision>
+        <origin xyz="0 -0.00921 0.04463" rpy="0 0 0" />
+        <geometry>
+          <box size="0.08 0.08 0.08" />
+        </geometry>
+      </collision>
+ -->
     <inertial>
       <mass value="0.2"/>
       <origin rpy="0 0 0" xyz="0 0 0.0625"/>
@@ -2494,30 +2492,48 @@ LOG: 2     |  0.010550   0.054601   0.056502 |
         <mesh filename="package://velma_description/meshes/collision/head_top_collision.STL"/>
       </geometry>
     </visual>
-    <collision>
-      <origin rpy="0 0 0 " xyz="0 0 0.04219"/>
-      <geometry>
-        <mesh filename="package://velma_description/meshes/collision/head_top_collision.STL"/>
-      </geometry>
-    </collision>
-    <self_collision_checking>
-      <origin rpy="-1.57075 0 0" xyz="0.0 0.12 0.0"/>
-      <geometry>
-        <capsule length="0.24" radius="0.07"/>
-      </geometry>
-    </self_collision_checking>
-    <self_collision_checking>
-      <origin rpy="-1.57075 0 0" xyz="-0.12 0.17 0.0"/>
-      <geometry>
-        <capsule length="0.14" radius="0.07"/>
-      </geometry>
-    </self_collision_checking>
-    <self_collision_checking>
-      <origin rpy="0 0 0" xyz="0.0 0.20 0.0"/>
-      <geometry>
-        <capsule length="0.23" radius="0.07"/>
-      </geometry>
-    </self_collision_checking>
+    <!-- 
+      <xacro:if value="${collision_detector == 'fcl'}">
+        <collision>
+          <origin xyz="0 0 0.04219" rpy="0 0 0 " />
+          <geometry>
+            <mesh filename="package://velma_description/meshes/collision/head_top_collision.STL" />
+          </geometry>
+        </collision>
+      </xacro:if>
+      <xacro:if value="${collision_detector == 'dart'}">
+        <collision>
+          <origin xyz="-0.0568619705737 0.1684935987 0" rpy="0 0 0"/>
+          <geometry>
+            <box size="0.197051048279 0.218739390373 0.121755480766"/>
+          </geometry>
+        </collision>
+        <collision>
+          <origin xyz="0.00178006081842 0.200341254473 0" rpy="0 0 0"/>
+          <geometry>
+            <box size="0.0787106156349 0.0698484331369 0.306180119514"/>
+          </geometry>
+        </collision>
+      </xacro:if>
+      <self_collision_checking>
+        <origin xyz="0.0 0.12 0.0" rpy="-1.57075 0 0"/>
+        <geometry>
+          <capsule radius="0.07" length="0.24"/>
+        </geometry>
+      </self_collision_checking>
+      <self_collision_checking>
+        <origin xyz="-0.12 0.17 0.0" rpy="-1.57075 0 0"/>
+        <geometry>
+          <capsule radius="0.07" length="0.14"/>
+        </geometry>
+      </self_collision_checking>
+      <self_collision_checking>
+        <origin xyz="0.0 0.20 0.0" rpy="0 0 0"/>
+        <geometry>
+          <capsule radius="0.07" length="0.23"/>
+        </geometry>
+      </self_collision_checking>
+ -->
     <inertial>
       <mass value="0.2"/>
       <origin rpy="0 0 0" xyz="0 0 0.0625"/>

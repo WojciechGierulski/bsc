@@ -71,7 +71,7 @@ def get_tf_matrix(publish=False):
 
 
 def send_classification_request(world_to_cam_transform, pc, calib_tf=None):
-    if calib_tf == None:
+    if calib_tf is None:
         calib_tf = np.array([1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1]).reshape((4,4))
     rospy.wait_for_service('classify')
     try:
@@ -118,7 +118,7 @@ if __name__ == "__main__":
     octomap = Initializer.get_octomap()
     Initializer.process_octomap(planner, octomap)
 
-    """print("Moving to calib pose")
+    print("Moving to calib pose")
     JointImpMoves.move_to_calib_pose(velma, planner, rt_path, 1)
     GripperMoves.open_grippers(velma, 'right')
 
@@ -130,7 +130,7 @@ if __name__ == "__main__":
     print("Moving back to init pos")
     GripperMoves.close_grippers(velma, 'right')
     JointImpMoves.move_head((0, 0), velma)
-    JointImpMoves.move_to_init_pos(velma)"""
+    JointImpMoves.move_to_init_pos(velma)
 
     JointImpMoves.move_head((0, 0.85), velma)
 
@@ -138,7 +138,7 @@ if __name__ == "__main__":
     print("Requesting classification")
     point_cloud = rospy.wait_for_message(PARAMS["pc_topic"], PointCloud2, timeout=None)
     world_to_cam_transform = frame_to_tf_matrix(get_tf(PARAMS["world_frame"], PARAMS["camera_frame"]))
-    classes, scores, transformations = send_classification_request(world_to_cam_transform, point_cloud)
+    classes, scores, transformations = send_classification_request(world_to_cam_transform, point_cloud, calib_tf)
     transformations = [np.linalg.inv(transform) for transform in transformations]
     print(classes)
     rospy.Timer(rospy.Duration(1), lambda x: publish_detected_object_tf(transformations, classes))
@@ -175,5 +175,6 @@ if __name__ == "__main__":
     qs = JointImpMoves.transform_iks_and_torsos_to_q(iks, torsos, hand)
     JointImpMoves.move_with_planning(velma, qs, planner, hand)
     SequenceExecutor.execute_sequence(sequence, velma, hand, solver)
+    print("Done")
 
     rospy.spin()

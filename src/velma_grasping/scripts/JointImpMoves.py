@@ -28,7 +28,12 @@ class JointImpMoves:
     @staticmethod
     def move_with_planning(velma, qs, planner, hand, collision_object=None):
         #qs = [qMapToConstraints(q, 0.01, group=velma.getJointGroup("impedance_joints")) for q in qs]
-        qs = JointImpMoves.get_left_arm_constraints(qs) if hand == "right" else JointImpMoves.get_right_arm_constraints(qs)
+        if hand == "right":
+            qs = JointImpMoves.get_left_arm_constraints(qs)
+        elif hand == "left":
+            qs = JointImpMoves.get_right_arm_constraints(qs)
+        else:
+            qs = [qMapToConstraints(q, 0.01, group=velma.getJointGroup("impedance_joints")) for q in qs]
         traj = None
         for i in range(10):
             rospy.sleep(0.1)
@@ -132,7 +137,7 @@ class JointImpMoves:
     @staticmethod
     def move_to_calib_pose(velma, planner, rt_path, calib_pose_nr):
         pose = dict(JointImpMoves._load_calib_pos(rt_path, calib_pose_nr))
-        JointImpMoves.move_with_planning(velma, [pose], planner)
+        JointImpMoves.move_with_planning(velma, [pose], planner, None)
 
         q_dest = (0, 0.72)
         velma.moveHead(q_dest, 2.0, start_time=0.1)
