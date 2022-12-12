@@ -6,6 +6,7 @@ import math
 import numpy as np
 import json
 import sys
+from moveit_msgs.msg import Constraints, JointConstraint
 
 class JointImpMoves:
 
@@ -25,8 +26,10 @@ class JointImpMoves:
 
 
     @staticmethod
-    def move_with_planning(velma, qs, planner, collision_object=None):
-        qs = [qMapToConstraints(q, 0.01, group=velma.getJointGroup("impedance_joints")) for q in qs]
+    def move_with_planning(velma, qs, planner, hand, collision_object=None):
+        #qs = [qMapToConstraints(q, 0.01, group=velma.getJointGroup("impedance_joints")) for q in qs]
+        qs = JointImpMoves.get_left_arm_constraints(qs) if hand == "right" else JointImpMoves.get_right_arm_constraints(qs)
+        traj = None
         for i in range(10):
             rospy.sleep(0.1)
             js = velma.getLastJointState()
@@ -35,12 +38,12 @@ class JointImpMoves:
                 traj = planner.plan(js[1], qs, "impedance_joints", num_planning_attempts=5, max_velocity_scaling_factor=1, planner_id="RRTConnect",
                                     attached_collision_objects=[collision_object])
             elif collision_object is None:
-                traj = planner.plan(js[1], qs, "impedance_joints", num_planning_attempts=5, max_velocity_scaling_factor=0.03,
-                                    max_acceleration_scaling_factor=0.5, planner_id="RRTConnect")
-            if traj == None:
+                traj = planner.plan(js[1], qs, "impedance_joints", num_planning_attempts=10, max_velocity_scaling_factor=0.15,
+                                    max_acceleration_scaling_factor=0.15, planner_id="RRTConnect")
+            if traj is None:
                 continue
             print("Executing trajectory...")
-            if not velma.moveJointTraj(traj, start_time=0.5, position_tol=60/180.0*math.pi, velocity_tol=60/180.0*math.pi):
+            if not velma.moveJointTraj(traj, start_time=0.5, position_tol=15/180.0*math.pi, velocity_tol=15/180.0*math.pi):
                 exitError(5)
             if velma.waitForJoint() == 0:
                 return True
@@ -56,7 +59,7 @@ class JointImpMoves:
         IKs = []
         torsos = []
         for torso in np.linspace(-1.5, 1.5, 10):
-            for elbow_ang in np.linspace(-1.5, 1.5, 20):
+            for elbow_ang in np.linspace(-1.5, 1.5, 10):
                 for frame in frames:
                     ik1 = solver.calculateIkArm(hand, frame, torso, elbow_ang, False, False, False)
                     if None not in ik1:
@@ -71,10 +74,14 @@ class JointImpMoves:
         qs = []
         if hand == 'right':
             for torso, IK in zip(torsos, IKs):
-                qs.append(JointImpMoves.get_joint_dict_right_arm(IK, torso))
+                q = JointImpMoves.get_joint_dict_right_arm(IK, torso)
+                #q.update(JointImpMoves.get_left_arm_init_dict())
+                qs.append(q)
         elif hand == 'left':
             for torso, IK in zip(torsos, IKs):
-                qs.append(JointImpMoves.get_joint_dict_left_arm(IK, torso))
+                q = JointImpMoves.get_joint_dict_left_arm(IK, torso)
+                #q.update(JointImpMoves.get_right_arm_init_dict())
+                qs.append(q)
         return qs
 
     @staticmethod
@@ -93,6 +100,7 @@ class JointImpMoves:
 
     @staticmethod
     def move_to_init_pos(velma):
+        JointImpMoves.move_head((0,0), velma)
         q = {'torso_0_joint':0, 'right_arm_0_joint':-0.3, 'right_arm_1_joint':-1.8,
             'right_arm_2_joint':1.25, 'right_arm_3_joint':0.85, 'right_arm_4_joint':0, 'right_arm_5_joint':-0.5,
             'right_arm_6_joint':0, 'left_arm_0_joint':0.3, 'left_arm_1_joint':1.8, 'left_arm_2_joint':-1.25,
@@ -103,6 +111,17 @@ class JointImpMoves:
             print(error)
             sys.exit()
         rospy.sleep(0.1)
+
+    @staticmethod
+    def get_left_arm_init_dict():
+        return {'left_arm_0_joint':0.3, 'left_arm_1_joint':1.8, 'left_arm_2_joint':-1.25,
+            'left_arm_3_joint':-0.85, 'left_arm_4_joint':0, 'left_arm_5_joint':0.5, 'left_arm_6_joint':0 }
+
+    @staticmethod
+    def get_right_arm_init_dict():
+        return {'right_arm_0_joint':-0.3, 'right_arm_1_joint':-1.8,
+            'right_arm_2_joint':1.25, 'right_arm_3_joint':0.85, 'right_arm_4_joint':0, 'right_arm_5_joint':-0.5,
+            'right_arm_6_joint':0}
 
     @staticmethod
     def _load_calib_pos(rt_path, calib_pose_nr):
@@ -143,3 +162,30 @@ class JointImpMoves:
         for frame in frames:
             new_frames.append(frame*transformation)
         return new_frames
+
+    @staticmethod
+    def get_left_arm_constraints(qs):
+        total_qs = []
+        c_dict = JointImpMoves.get_left_arm_init_dict()
+        for q in qs:
+            curr_c = Constraints()
+            for joint_name, joint_value in q.items():
+                curr_c.joint_constraints.append(JointConstraint(joint_name, joint_value, 0.01, 0.01, 1.0))
+            for joint_name, joint_value in c_dict.items():
+                curr_c.joint_constraints.append(JointConstraint(joint_name, joint_value, 0.02, 0.02, 1.0))
+            total_qs.append(curr_c)
+        return total_qs
+
+    @staticmethod
+    def get_right_arm_constraints(qs):
+        total_qs = []
+        c_dict = JointImpMoves.get_right_arm_init_dict()
+        for q in qs:
+            curr_c = Constraints()
+            for joint_name, joint_value in c_dict.items():
+                curr_c.joint_constraints.append(JointConstraint(joint_name, joint_value, 0.02, 0.02, 1.0))
+            for joint_name, joint_value in q.items():
+                curr_c.joint_constraints.append(JointConstraint(joint_name, joint_value, 0.01, 0.01, 1.0))
+            total_qs.append(curr_c)
+        return total_qs
+

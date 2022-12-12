@@ -8,6 +8,7 @@ import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from itertools import permutations
+from pyobb.obb import OBB
 
 
 def remove_nans(data):
@@ -114,6 +115,16 @@ def get_table_bbox(inliers, plane, ROIheight, offset):
     obox.center = new_center
     return obox
 
+def remove_points_below_z(pc, z):
+    pts = np.asarray(pc.points)
+    colors = np.asarray(pc.colors)
+    mapp = pts[:,2] >= z
+    pts = pts[mapp]
+    colors = colors[mapp]
+    pc.points = o3d.utility.Vector3dVector(pts)
+    pc.colors = o3d.utility.Vector3dVector(colors)
+    return pc
+
 
 def process_kinect_data(data, tf, tf_calib=None, offset=0.01, ROIheight = 0.5):
     pts, rgb = convert_to_numpy_pts_rgb(data)
@@ -123,6 +134,7 @@ def process_kinect_data(data, tf, tf_calib=None, offset=0.01, ROIheight = 0.5):
     pc = transform_to_world_frame(pc, tf)
     if tf_calib is not None:
         pc = pc.transform(tf_calib)
+    pc = remove_points_below_z(pc, 0.3)
     plane, inliers = segment_plane(pc)
     inliers = pc.select_by_index(inliers)
     pc = remove_points_below_plane(pc, plane, offset)
@@ -131,7 +143,7 @@ def process_kinect_data(data, tf, tf_calib=None, offset=0.01, ROIheight = 0.5):
         return []
     pc = pc.crop(ROIbox)
     pc_new, ind = pc.remove_radius_outlier(nb_points=15, radius=0.01)
-    labels = np.array(pc_new.cluster_dbscan(eps=0.1, min_points=35, print_progress=True))
+    labels = np.array(pc_new.cluster_dbscan(eps=0.05, min_points=35, print_progress=True))
     max_label = labels.max()
     n_clusters = max_label + 1
     clusters = []
@@ -164,7 +176,6 @@ def classify_pc(cluster, db):
         start = time.time()
         result_global = execute_global_registration(source_down, target_down, source_fpfh, target_fpfh, voxel_size)
         print(result_global)
-        print("Global: "+ str((time.time()-start)) )
         #draw_registration_result(source_down, target_down, result_global.transformation)
         if result_global.fitness < 0.1:
             continue
@@ -172,12 +183,11 @@ def classify_pc(cluster, db):
             #o3d.visualization.draw_geometries([object_pc, cluster, o3d.geometry.TriangleMesh.create_coordinate_frame(0.1)])
             start = time.time()
             result_local = refine_registration(source, target, voxel_size, result_global.transformation)
-            print("Local: " + str(time.time()-start))
             transforms.append(result_local.transformation)
             scores.append(result_local.fitness)
             names.append(value.name)
             print(result_local)
-            draw_registration_result(source, target, result_local.transformation)
+            #draw_registration_result(source, target, result_local.transformation)
     transform = None
     max_fitness = None
     name = None
@@ -262,8 +272,11 @@ def draw_registration_result(source, target, transformation):
     o3d.visualization.draw_geometries([source_temp, target_temp, o3d.geometry.TriangleMesh.create_coordinate_frame(0.1)])
 
 def compare_bboxes(source, target):
-    src_box = list(source.get_oriented_bounding_box().extent)
-    target_box = list(target.get_oriented_bounding_box().extent)
+    src_box = OBB.build_from_points(np.asarray(source.points))
+    target_box = OBB.build_from_points(np.asarray(target.points))
+    #o3d.visualization.draw_geometries([source, target, src_box, target_box])
+    src_box = list(src_box.extents)
+    target_box = list(target_box.extents)
     src0 = src_box[0]
     src1 = src_box[1]
     src2 = src_box[2]
@@ -276,7 +289,7 @@ def compare_bboxes(source, target):
     trg1 = trg[1]
     trg2 = trg[2]
     if abs(src0-trg0) > 0.05 or abs(src1-trg1) > 0.05 or abs(src2-trg2) > 0.05 or number_at_least_x_times_bigger(src1, src1, 1.5) or number_at_least_x_times_bigger(src0, src0, 1.5) or number_at_least_x_times_bigger(src2, src2, 1.5):
-        return False
+        return False ## bboxes not similar
     return True ## bboxes similar
 
 def number_at_least_x_times_bigger(x1, x2, x):

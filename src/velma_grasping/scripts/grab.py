@@ -107,6 +107,7 @@ if __name__ == "__main__":
     print("Closing grippers")
     GripperMoves.close_grippers(velma, 'both')
     rospy.sleep(1)
+    print("Moving to init pos")
     JointImpMoves.move_to_init_pos(velma)
     rospy.sleep(1)
     if OCTOMAP_TYPE == "online":
@@ -142,10 +143,26 @@ if __name__ == "__main__":
     print(classes)
     rospy.Timer(rospy.Duration(1), lambda x: publish_detected_object_tf(transformations, classes))
 
-    idx = classes.index(OBJECT_NAME)
+    if OBJECT_NAME == "Pen1" or OBJECT_NAME == "Pen2":
+        try:
+            OBJECT_NAME = "Pen1"
+            idx = classes.index(OBJECT_NAME)
+        except:
+            try:
+                OBJECT_NAME = "Pen2"
+                idx = classes.index(OBJECT_NAME)
+            except:
+                print("No such object")
+                sys.exit()
+    else:
+        try:
+            idx = classes.index(OBJECT_NAME)
+        except:
+            print("No such object")
+            sys.exit()
 
     hand = check_which_hand(velma, transformations[idx])
-    #hand = "right"
+    hand = "right"
 
     GG = GraspGenerator()
     frames, sequence = GG.grasps[OBJECT_NAME](transformations[idx], hand)
@@ -156,7 +173,7 @@ if __name__ == "__main__":
     publish_pose_arr(frames, "grasps")
     iks, torsos = JointImpMoves.get_IK_for_frames(hand, frames, solver)
     qs = JointImpMoves.transform_iks_and_torsos_to_q(iks, torsos, hand)
-    JointImpMoves.move_with_planning(velma, qs, planner)
+    JointImpMoves.move_with_planning(velma, qs, planner, hand)
     SequenceExecutor.execute_sequence(sequence, velma, hand, solver)
 
     rospy.spin()

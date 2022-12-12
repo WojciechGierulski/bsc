@@ -3,7 +3,7 @@
 
   <arg name="use_kinect" default="true" />
   <arg name="use_stereo_pair" default="false" />
-  <arg name="world_name" default="$(find velma_grasping)/worlds/test_world1.world" />
+  <arg name="world_name" default="$(find velma_grasping)/worlds/test_world2.world" />
   <arg name="GAZEBO_MODEL_PATH" default="$(find velma_grasping)/models" />
   <arg name="GAZEBO_RESOURCE_PATH" default="" />
   <arg name="profile" default="dart_2ms" />
@@ -51,11 +51,6 @@
     <arg name="run_steps" value="$(arg run_steps)" />
     <arg name="use_gpu_ray" value="$(arg use_gpu_ray)" />
     <arg name="collision_detector" value="$(arg collision_detector)" />
-  </include>
-
-  <include file='$(find rcprg_gazebo_utils)/launch/gazebo_publish_ros_tf_object.launch'>
-    <arg name='link_name' value='table_b::link'/>
-    <arg name='frame_id' value='table'/>
   </include>
 
   <node name="rviz_velma" pkg="rcprg_ros_utils" type="run_rviz.sh" />

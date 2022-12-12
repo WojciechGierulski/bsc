@@ -1,8 +1,4 @@
-Cola
-GlassWine
-Mug
-Pen1
-Pen2
-BoxLong
-BoxSquare
-Rubber
+VelmaCylinder
+VelmaBowl
+VelmaBox1
+VelmaBox2

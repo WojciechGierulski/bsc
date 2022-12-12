@@ -48,7 +48,7 @@ class CartImpMoves:
             velma_pos['left_arm_3_joint'], velma_pos['left_arm_4_joint'], velma_pos['left_arm_5_joint'],
             velma_pos['left_arm_6_joint'])
             frame = solver.getLeftArmFk(velma_pos['torso_0_joint'], configuration)
-            p = PyKDL.Vector(dX, 0, 0)
+            p = PyKDL.Vector(-dX, 0, 0)
             p = frame * p
             frame.p = p
             if not velma.moveCartImpLeft([frame], [2.0], None, None, None, None,
@@ -70,7 +70,7 @@ class CartImpMoves:
             p = frame * p
             frame.p = p
             if not velma.moveCartImpRight([frame], [2.0], None, None, None, None,
-                                          PyKDL.Wrench(PyKDL.Vector(5, 5, 5), PyKDL.Vector(5, 5, 5)), start_time=0.5):
+                                          PyKDL.Wrench(PyKDL.Vector(50, 50, 50), PyKDL.Vector(50, 50, 50)), start_time=0.5):
                 exitError(16)
             if velma.waitForEffectorRight() != 0:
                 exitError(17)
@@ -85,7 +85,7 @@ class CartImpMoves:
             p = frame * p
             frame.p = p
             if not velma.moveCartImpLeft([frame], [2.0], None, None, None, None,
-                                         PyKDL.Wrench(PyKDL.Vector(5, 5, 5), PyKDL.Vector(5, 5, 5)), start_time=0.5):
+                                         PyKDL.Wrench(PyKDL.Vector(50, 50, 50), PyKDL.Vector(50, 50, 50)), start_time=0.5):
                 exitError(16)
             if velma.waitForEffectorLeft() != 0:
                 exitError(17)

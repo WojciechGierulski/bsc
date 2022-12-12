@@ -52,14 +52,10 @@ def PyKDLFrame_to_Pose(frame):
 
 
 def tf_matrix_to_PyKDLFrame(tf):
-    print tf
     rot = Rotation.from_dcm(tf[0:3, 0:3])
-    print(rot)
     q = rot.as_quat()
     qx = q[0]
     qy = q[1]
     qz = q[2]
     qw = q[3]
-
-    f = PyKDL.Frame(PyKDL.Rotation.Quaternion(qx,qy,qz,qw), PyKDL.Vector(tf[0,3], tf[1,3], tf[2,3]))
-    return f
+    return PyKDL.Frame(PyKDL.Rotation.Quaternion(qx,qy,qz,qw), PyKDL.Vector(tf[0,3], tf[1,3], tf[2,3]))

@@ -3,8 +3,8 @@ import PyKDL
 import tf
 import rospy
 from scipy.spatial.transform import Rotation
-from geometry_msgs.msg import PoseArray, Pose
-from tf_maths import PyKDLFrame_to_Pose, tf_matrix_to_PyKDLFrame
+from geometry_msgs.msg import PoseArray
+from tf_maths import PyKDLFrame_to_Pose
 
 def np_to_pykdl_vector(l):
     return PyKDL.Vector(l[0], l[1], l[2])
