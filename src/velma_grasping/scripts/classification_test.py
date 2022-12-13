@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 
-from visual_analysis import process_kinect_data, classify
+from visual_analysis_functions import process_kinect_data, classify_pc
 from objects_databse import DataBase
 import pickle
 import open3d as o3d
@@ -28,6 +28,6 @@ print(clusters)
 
 
 for cluster in clusters:
-    transform, fitness, name = classify(cluster, db)
+    transform, fitness, name = classify_pc(cluster, db)
     print("RESULT")
     o3d.visualization.draw_geometries([cluster, db.objects[name].pc.transform(transform)])

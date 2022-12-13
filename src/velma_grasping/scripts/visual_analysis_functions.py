@@ -187,7 +187,7 @@ def classify_pc(cluster, db):
             scores.append(result_local.fitness)
             names.append(value.name)
             print(result_local)
-            #draw_registration_result(source, target, result_local.transformation)
+            #draw_registration_result(source_down, target_down, result_local.transformation)
     transform = None
     max_fitness = None
     name = None

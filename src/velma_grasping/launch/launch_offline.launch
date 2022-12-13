@@ -71,5 +71,8 @@
   <include file='$(find velma_common)/launch/octomap_offline_server.launch'>
     <arg name='octomap_file' value='$(find velma_grasping)/worlds/test_world2_map.bt' />
   </include>
+  
+  <include file='$(find velma_common)/launch/show_kinect_frustum.launch'>
+  </include>
 
 </launch>

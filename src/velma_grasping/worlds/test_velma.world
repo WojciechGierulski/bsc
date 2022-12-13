@@ -86,48 +86,48 @@
       <heading_deg>0</heading_deg>
     </spherical_coordinates>
     <state world_name='default'>
-      <sim_time>6590 736000000</sim_time>
+      <sim_time>6611 278000000</sim_time>
       <real_time>0 0</real_time>
-      <wall_time>1670873429 318587837</wall_time>
-      <iterations>1929350</iterations>
+      <wall_time>1670966339 766552312</wall_time>
+      <iterations>10271</iterations>
       <model name='VelmaCylinder'>
-        <pose frame=''>0.827944 -0.131538 0.987925 0 -4e-06 -0.000204</pose>
+        <pose frame=''>0.854341 -0.095703 0.987925 3e-06 -6e-06 -0.000205</pose>
         <scale>1 1 1</scale>
         <link name='link_0'>
-          <pose frame=''>0.827944 -0.131538 0.987925 0 -4e-06 -0.000204</pose>
-          <velocity>9.2e-05 8.9e-05 1e-06 -0.000942 0.000964 -0</velocity>
+          <pose frame=''>0.854341 -0.095703 0.987925 3e-06 -6e-06 -0.000205</pose>
+          <velocity>5e-06 8.7e-05 4.1e-05 -0.000912 5.7e-05 0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
       <model name='bowl_high'>
-        <pose frame=''>0.801073 0.268345 0.892925 0 -1e-06 -0.001497</pose>
+        <pose frame=''>0.597629 -0.260766 0.892925 0 -1e-06 -0.001506</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>0.801073 0.268345 0.892925 0 -1e-06 -0.001497</pose>
+          <pose frame=''>0.597629 -0.260766 0.892925 0 -1e-06 -0.001506</pose>
           <velocity>0 0 -0 -0 -0 -0</velocity>
           <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
       <model name='box1'>
-        <pose frame=''>0.613402 0.044549 0.942925 2e-06 -1e-06 0.068455</pose>
+        <pose frame=''>0.883246 0.365312 0.942925 2e-06 -1e-06 0.068449</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>0.613402 0.044549 0.942925 2e-06 -1e-06 0.068455</pose>
+          <pose frame=''>0.883246 0.365312 0.942925 2e-06 -1e-06 0.068449</pose>
           <velocity>-0 -2e-06 1e-06 2.6e-05 -1e-05 1e-06</velocity>
-          <acceleration>0 0 0 -0 -0 -0</acceleration>
+          <acceleration>0 0 0 0 -0 0</acceleration>
           <wrench>0 0 0 0 -0 0</wrench>
         </link>
       </model>
       <model name='box2'>
-        <pose frame=''>0.678433 -0.355483 0.942911 1.57008 1.57053 2.55152</pose>
+        <pose frame=''>0.607183 0.091561 0.94292 -3.09058 1.57075 -2.10905</pose>
         <scale>1 1 1</scale>
         <link name='link'>
-          <pose frame=''>0.678433 -0.355483 0.942911 1.57008 1.57053 2.55152</pose>
-          <velocity>-5.8e-05 3.7e-05 7e-05 -0.000753 -0.001148 5e-06</velocity>
-          <acceleration>0 0 0 0 -0 0</acceleration>
-          <wrench>0 0 0 0 -0 0</wrench>
+          <pose frame=''>0.607183 0.091561 0.94292 -3.09058 1.57075 -2.10905</pose>
+          <velocity>-8e-06 -1.1e-05 2.5e-05 0.000207 -0.000144 5e-06</velocity>
+          <acceleration>0 0 -0 0 -0 0</acceleration>
+          <wrench>0 0 -0 0 -0 0</wrench>
         </link>
       </model>
       <model name='ground_plane'>
@@ -156,7 +156,7 @@
     </state>
     <gui fullscreen='0'>
       <camera name='user_camera'>
-        <pose frame=''>-1.01735 -0.234723 3.51235 -0 1.0778 0.018858</pose>
+        <pose frame=''>-0.658508 -0.227955 3.65951 0 1.1858 0.018858</pose>
         <view_controller>orbit</view_controller>
         <projection_type>perspective</projection_type>
       </camera>
@@ -296,7 +296,7 @@
           <pose frame=''>0 0 0 0 -0 0</pose>
           <geometry>
             <mesh>
-              <uri>/home/wgieruls/Desktop/bsc/src/velma_grasping/models/VelmaCylinder/VelmaCylinder.dae</uri>
+              <uri>model://VelmaCylinder/VelmaCylinder.dae</uri>
               <scale>1 1 1</scale>
             </mesh>
           </geometry>

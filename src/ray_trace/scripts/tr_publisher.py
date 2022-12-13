@@ -97,6 +97,10 @@ def publish_points(points, topic_name, frame="head_kinect_rgb_optical_frame"):
     rate = rospy.Rate(10)
     for _ in range(10):
         m = Marker()
+        m.color.a = 1
+        m.color.r = 1
+        m.color.b = 0
+        m.color.g = 0
         m.header.frame_id = frame
         m.scale.x = 0.0025
         m.scale.y = 0.0025

@@ -4,9 +4,7 @@ Panels:
     Name: Displays
     Property Tree Widget:
       Expanded:
-        - /TF1
         - /TF1/Frames1
-        - /PoseArray1
       Splitter Ratio: 0.9139999747276306
     Tree Height: 972
   - Class: rviz/Selection
@@ -226,10 +224,6 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        left_needle_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
         right_FtSensorLink:
           Alpha: 1
           Show Axes: false
@@ -351,10 +345,6 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        right_needle_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
         stereo_left_link:
           Alpha: 1
           Show Axes: false
@@ -407,13 +397,13 @@ Visualization Manager:
       Reference Frame: head_kinect_rgb_link
       Value: false
     - Class: rviz/MarkerArray
-      Enabled: false
+      Enabled: true
       Marker Topic: /camera_frustum
       Name: MarkerArray
       Namespaces:
-        {}
+        head_kinect_rgb_optical_frame: true
       Queue Size: 100
-      Value: false
+      Value: true
     - Class: rviz/MarkerArray
       Enabled: false
       Marker Topic: /rays
@@ -430,13 +420,13 @@ Visualization Manager:
       Reference Frame: world
       Value: true
     - Class: rviz/MarkerArray
-      Enabled: true
+      Enabled: false
       Marker Topic: /test
       Name: MarkerArray
       Namespaces:
         {}
       Queue Size: 100
-      Value: true
+      Value: false
     - Class: rviz/InteractiveMarkers
       Enable Transparency: true
       Enabled: false
@@ -455,21 +445,21 @@ Visualization Manager:
       Queue Size: 100
       Value: false
     - Class: rviz/Marker
-      Enabled: true
+      Enabled: false
       Marker Topic: bounds
       Name: Marker
       Namespaces:
         {}
       Queue Size: 100
-      Value: true
+      Value: false
     - Class: rviz/Marker
-      Enabled: true
+      Enabled: false
       Marker Topic: cropped_camera_pc
       Name: Marker
       Namespaces:
         {}
       Queue Size: 100
-      Value: true
+      Value: false
     - Class: rviz/Axes
       Enabled: false
       Length: 0.15000000596046448
@@ -527,21 +517,21 @@ Visualization Manager:
       Reference Frame: Rubber
       Value: false
     - Class: rviz/MarkerArray
-      Enabled: true
+      Enabled: false
       Marker Topic: /merged_cells_vis_array
       Name: MarkerArray
       Namespaces:
         {}
       Queue Size: 100
-      Value: true
+      Value: false
     - Class: rviz/MarkerArray
-      Enabled: true
+      Enabled: false
       Marker Topic: /reachability_range
       Name: MarkerArray
       Namespaces:
         {}
       Queue Size: 100
-      Value: true
+      Value: false
     - Class: rviz/Image
       Enabled: false
       Image Topic: /head_stereo_left/image_raw
@@ -566,7 +556,7 @@ Visualization Manager:
       Color: 255; 255; 255
       Color Transformer: RGB8
       Decay Time: 0
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
       Min Color: 0; 0; 0
@@ -581,12 +571,12 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: true
-      Value: true
+      Value: false
     - Class: rviz/Axes
       Enabled: false
-      Length: 1
+      Length: 0.20000000298023224
       Name: Axes
-      Radius: 0.10000000149011612
+      Radius: 0.019999999552965164
       Reference Frame: head_kinect_rgb_optical_frame
       Value: false
     - Class: rviz/TF
@@ -594,10 +584,6 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        BoxSquare:
-          Value: true
-        Mug:
-          Value: true
         calib_left_arm_base_link:
           Value: false
         calib_right_arm_base_link:
@@ -635,7 +621,7 @@ Visualization Manager:
         left_HandFingerTwoKnuckleTwoLink:
           Value: false
         left_HandGripLink:
-          Value: true
+          Value: false
         left_HandPalmLink:
           Value: false
         left_HandPalmMarkerALink:
@@ -659,7 +645,7 @@ Visualization Manager:
         left_arm_6_link:
           Value: false
         left_arm_7_link:
-          Value: true
+          Value: false
         left_arm_ee_link:
           Value: false
         left_gripper_mount_link:
@@ -667,8 +653,6 @@ Visualization Manager:
         left_keepUprightLink1:
           Value: false
         left_keepUprightLink2:
-          Value: false
-        left_needle_link:
           Value: false
         right_FtSensorLink:
           Value: false
@@ -689,7 +673,7 @@ Visualization Manager:
         right_HandFingerTwoKnuckleTwoLink:
           Value: false
         right_HandGripLink:
-          Value: true
+          Value: false
         right_HandPalmLink:
           Value: false
         right_HandPalmMarkerALink:
@@ -713,7 +697,7 @@ Visualization Manager:
         right_arm_6_link:
           Value: false
         right_arm_7_link:
-          Value: true
+          Value: false
         right_arm_ee_link:
           Value: false
         right_gripper_mount_link:
@@ -721,8 +705,6 @@ Visualization Manager:
         right_keepUprightLink1:
           Value: false
         right_keepUprightLink2:
-          Value: false
-        right_needle_link:
           Value: false
         stereo_left_link:
           Value: false
@@ -745,10 +727,6 @@ Visualization Manager:
       Show Names: true
       Tree:
         world:
-          BoxSquare:
-            {}
-          Mug:
-            {}
           torso_base:
             torso_link0:
               calib_left_arm_base_link:
@@ -787,8 +765,6 @@ Visualization Manager:
                                 left_keepUprightLink1:
                                   left_keepUprightLink2:
                                     {}
-                                left_needle_link:
-                                  {}
               calib_right_arm_base_link:
                 right_arm_1_link:
                   right_arm_2_link:
@@ -825,8 +801,6 @@ Visualization Manager:
                                 right_keepUprightLink1:
                                   right_keepUprightLink2:
                                     {}
-                                right_needle_link:
-                                  {}
               head_base:
                 head_pan_motor:
                   head_pan_link:
@@ -887,25 +861,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.808922052383423
+      Distance: 3.823126792907715
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.3064805865287781
-        Y: 0.6038939952850342
-        Z: 1.386817216873169
+        X: 0.40013420581817627
+        Y: -0.4370844066143036
+        Z: 0.5874400734901428
       Focal Shape Fixed Size: false
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.7197976112365723
+      Pitch: 0.9847973585128784
       Target Frame: <Fixed Frame>
       Value: Orbit (rviz)
-      Yaw: 2.7597975730895996
+      Yaw: 0.5866261720657349
     Saved: ~
 Window Geometry:
   Displays:

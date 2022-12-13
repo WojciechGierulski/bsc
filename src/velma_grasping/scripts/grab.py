@@ -171,6 +171,7 @@ if __name__ == "__main__":
 
     frames = JointImpMoves.gripper_to_joint_7_transform(velma, frames, hand)
     publish_pose_arr(frames, "grasps")
+
     iks, torsos = JointImpMoves.get_IK_for_frames(hand, frames, solver)
     qs = JointImpMoves.transform_iks_and_torsos_to_q(iks, torsos, hand)
     JointImpMoves.move_with_planning(velma, qs, planner, hand)
