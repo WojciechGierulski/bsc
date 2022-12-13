@@ -206,7 +206,7 @@
   <joint name="torso_0_joint" type="revolute">
     <origin rpy="0 0 0" xyz="0 0 0.03"/>
     <axis xyz="0 0 1"/>
-    <limit effort="100" lower="-1.57" upper="1.57" velocity="100"/>
+    <limit effort="100" lower="-1.57" upper="1.57" velocity="0.523598775598"/>
     <parent link="torso_base"/>
     <child link="torso_link0"/>
     <dynamics damping="10.0"/>
@@ -245,12 +245,6 @@
         <capsule length="0.4" radius="0.18"/>
       </geometry>
     </self_collision_checking>
-    <self_collision_checking>
-      <origin rpy="0 0 0" xyz="0.04 0 1.57"/>
-      <geometry>
-        <sphere radius="0.24"/>
-      </geometry>
-    </self_collision_checking>
     <inertial>
       <mass value="30.0"/>
       <origin rpy="0 0 0" xyz="0 -0.06 0.130"/>
@@ -258,6 +252,35 @@
     </inertial>
   </link>
   <gazebo reference="torso_link0">
+    <turnGravityOff>false</turnGravityOff>
+    <selfCollide>true</selfCollide>
+    <material>Gazebo/DarkGrey</material>
+  </gazebo>
+  <joint name="head_bounding_sphere_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0 0 0.03"/>
+    <parent link="torso_base"/>
+    <child link="head_bounding_sphere"/>
+  </joint>
+  <link name="head_bounding_sphere">
+    <collision>
+      <origin rpy="0 0 0" xyz="0.04 0 1.57"/>
+      <geometry>
+        <sphere radius="0.24"/>
+      </geometry>
+    </collision>
+    <self_collision_checking>
+      <origin rpy="0 0 0" xyz="0.04 0 1.57"/>
+      <geometry>
+        <sphere radius="0.24"/>
+      </geometry>
+    </self_collision_checking>
+    <inertial>
+      <mass value="0.3"/>
+      <origin rpy="0 0 0" xyz="0 -0.06 0.130"/>
+      <inertia ixx="0.03175" ixy="0" ixz="0" iyy="0.03175" iyz="0" izz="0.0135"/>
+    </inertial>
+  </link>
+  <gazebo reference="head_bounding_sphere">
     <turnGravityOff>false</turnGravityOff>
     <selfCollide>true</selfCollide>
     <material>Gazebo/DarkGrey</material>

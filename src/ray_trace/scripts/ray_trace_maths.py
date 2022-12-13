@@ -7,7 +7,6 @@ import PyKDL
 import rospy
 from ray_trace.srv import *
 import trimesh
-import pyembree
 import time
 
 

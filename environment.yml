@@ -1,0 +1,47 @@
+name: bsc
+channels:
+  - conda-forge
+  - anaconda
+  - defaults
+  - jf
+dependencies:
+  - _libgcc_mutex=0.1=main
+  - _openmp_mutex=5.1=1_gnu
+  - ca-certificates=2022.4.26=h06a4308_0
+  - certifi=2020.6.20=pyhd3eb1b0_3
+  - embree=2.17.7=ha770c72_2
+  - intel-openmp=2022.0.1=h06a4308_3633
+  - libblas=3.9.0=15_linux64_openblas
+  - libcblas=3.9.0=15_linux64_openblas
+  - libffi=3.3=he6710b0_2
+  - libgcc-ng=11.2.0=h1234567_1
+  - libgfortran-ng=12.1.0=h69a702a_16
+  - libgfortran5=12.1.0=hdcd56e2_16
+  - libgomp=11.2.0=h1234567_1
+  - liblapack=3.9.0=15_linux64_openblas
+  - libopenblas=0.3.20=pthreads_h78a6416_0
+  - libstdcxx-ng=11.2.0=h1234567_1
+  - mkl=2022.0.1=h06a4308_117
+  - ncurses=6.3=h5eee18b_3
+  - numpy=1.15.4=py27h8b7e671_1002
+  - pyembree=0.1.6=py27hb3f55d8_0
+  - python=2.7.18=ha1903f6_2
+  - readline=8.1.2=h7f8727e_1
+  - scipy=0.19.1=py27h1edc525_3
+  - setuptools=44.0.0=py27_0
+  - sip=4.19.13=py27he6710b0_0
+  - sqlite=3.38.5=hc218d9a_0
+  - tk=8.6.12=h1ccaba5_0
+  - trimesh=3.12.8=pyh6c4a22f_0
+  - wheel=0.37.1=pyhd3eb1b0_0
+  - zlib=1.2.12=h7f8727e_2
+  - pip:
+    - catkin-pkg==0.5.2
+    - docutils==0.18.1
+    - pip==20.3.4
+    - pyparsing==2.4.7
+    - python-dateutil==2.8.2
+    - pyyaml==5.4.1
+    - rospkg==1.4.0
+    - six==1.16.0
+prefix: /home/wgieruls/anaconda3/envs/bsc
